@@ -1,0 +1,60 @@
+:root{
+  --mainWhite:#f3f3f3;
+  --mainBlue:#2a2a72;
+  --lightBlue:#809ffd;
+  --mainDark:#23252b;
+  --mainOrange:#ffa408;
+  --mainYellow:#FFFF00;
+  --lightGreen:#54b9a3;
+  --lightBlue2:#ADD8E6;
+  --mainGreen:#008000;
+  --lightGrey:#e6e6e6;
+  --honeyDew:#F0FFF0;
+  --mainRed: #fc0303;
+}
+.btn-black{
+  background: transparent;
+  text-transform: capitalize;
+  font-size: 0.8rem !important;
+  color: var(--mainDark);
+  border-radius: 0 !important;
+  border: 0.1rem solid var(--mainDark) !important;
+}
+.btn-black:hover{
+  background: var(--mainDark) !important;
+  color: var(--mainWhite) !important;
+}
+.cart-icon{
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: red;
+}
+.background-white{
+  min-height: 100%;
+  background: var(--mainWhite);
+}
+html, body{
+  height: 100%;
+}
+body{
+  font-family: "Bebas Neue", sans-serif !important;
+  background-image: url("https://i.imgur.com/vo3XiR7.png") !important;  
+  color: var(--mainDark) !important;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+.text-title{
+  font-family: "Roboto Condensed" , cursive;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+}
+.text-blue{
+  color: var(--mainBlue);
+}
+.text-orange{
+  color: var(--mainOrange);
+}
+.text-bright{
+  color: var(--lightBlue);
+}
