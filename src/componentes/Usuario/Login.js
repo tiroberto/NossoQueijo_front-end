@@ -11,6 +11,9 @@ export default function Login() {
 
                 const send = (event) => {
                     event.preventDefault();
+                    var InputEmail = event.target.elements.InputEmail;
+                    var InputPassword = event.target.elements.InputPassword;
+
                     let resultVerificacao = false;
 
                     for (var i = 0; i < loginInputs.length; i++) {
@@ -22,8 +25,8 @@ export default function Login() {
 
                     if (resultVerificacao) {
                         const usuarioLogin = {
-                            email: InputEmail1.value,
-                            senha: InputPassword1.value
+                            email: InputEmail.value,
+                            senha: InputPassword.value
                         };
                         handleSubmitLogin(usuarioLogin);
                     }
@@ -37,12 +40,12 @@ export default function Login() {
                         <form onSubmit={send} className="mt-4">
                             <div className="form-group">
                                 <label htmlFor="InputEmail1">E-mail</label>
-                                <input type="email" onChange={() => { value.handleChangeLogin(); }} className="form-control text-lowercase" id="InputEmail1" name="InputEmail1" aria-describedby="emailHelp" />
+                                <input type="email" onChange={() => { value.handleChangeLogin(); }} className="form-control text-lowercase" id="InputEmail1" name="InputEmail" aria-describedby="emailHelp" />
                                 <div className="text-danger" hidden={value.loginInputs[0].errorNotVisible ? true : false}>{value.loginInputs[0].error}</div>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="InputPassword1">Senha</label>
-                                <input maxLength="30" type="password" onChange={() => { value.handleChangeLogin(); }} className="form-control" id="InputPassword1" name="InputPassword1" />
+                                <input maxLength="30" type="password" onChange={() => { value.handleChangeLogin(); }} className="form-control" id="InputPassword1" name="InputPassword" />
                                 <div className="text-danger" hidden={value.loginInputs[1].errorNotVisible ? true : false}>{value.loginInputs[1].error}</div>
                             </div>
                             <div>

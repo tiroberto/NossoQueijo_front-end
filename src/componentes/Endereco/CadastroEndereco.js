@@ -23,6 +23,14 @@ export default class CadastroEndereco extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
+                        var inputLogradouro = event.target.elements.inputLogradouro;
+                        var inputNumero = event.target.elements.inputNumero;
+                        var inputBairro = event.target.elements.inputBairro;
+                        var inputComplemento = event.target.elements.inputComplemento;
+                        var inputCEP = event.target.elements.inputCEP;
+                        var selectCidade = event.target.elements.selectCidade;
+                        var selectEstado = event.target.elements.selectEstado;
+                        
                         let resultVerificacao = false;
 
                         for (var i = 0; i < editarEnderecoInputs.length; i++) {

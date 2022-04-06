@@ -12,6 +12,12 @@ export default class CadastroUsuario extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
+                        var InputNome = event.target.elements.InputNome;
+                        var InputCPF = event.target.elements.InputCPF;
+                        var InputDataNascimento = event.target.elements.InputDataNascimento;
+                        var InputEmail = event.target.elements.InputEmail;
+                        var InputPassword = event.target.elements.InputPassword;
+                        
                         let resultVerificacao = false;
 
                         for (var i = 0; i < cadastroInputs.length; i++) {

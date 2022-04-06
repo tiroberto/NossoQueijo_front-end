@@ -983,36 +983,63 @@ class ProdutoProvider extends Component {
     handleSubmitCadastroProduto = async (produtoCadastrar) => {
         try {
             this.openSpinner();
-            var produto = {
-                idProduto: 0,
-                nome: produtoCadastrar.nome,
-                qntdEstoque: produtoCadastrar.qntdEstoque,
-                preco: produtoCadastrar.preco,
-                peso: produtoCadastrar.peso,
-                imagem: produtoCadastrar.imagem
-            };
 
-            await api.post("/Produto/salvar", produto)
-                .then((res) => {
-                    console.log(res);
-                    var produto = res.data.result;
-                    var produtosAtualizar = this.state.produtos;
+            if (produtoCadastrar.idProduto <= 0) {
+                var produto = {
+                    idProduto: 0,
+                    nome: produtoCadastrar.nome,
+                    qntdEstoque: produtoCadastrar.qntdEstoque,
+                    preco: produtoCadastrar.preco,
+                    peso: produtoCadastrar.peso,
+                    imagem: produtoCadastrar.imagem
+                };
 
-                    if (produto.idProduto > 0) {
-                        produtosAtualizar.push(produto);
-                        this.setState(() => {
-                            return {
-                                produtos: produtosAtualizar
-                            };
-                        });
-                        this.closeSpinner();
-                        this.openModalMensagem("Produto cadastrato com sucesso", "/admin-produtos");
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.openModalMensagem(error, "/admin-produtos");
-                });
+                await api.post("/Produto/salvar", produto)
+                    .then((res) => {
+                        console.log(res);
+                        var produto = res.data.result;
+                        var produtosAtualizar = this.state.produtos;
+
+                        if (produto.idProduto > 0) {
+                            produtosAtualizar.push(produto);
+                            this.setState(() => {
+                                return {
+                                    produtos: produtosAtualizar
+                                };
+                            });
+                            this.closeSpinner();
+                            this.openModalMensagem("Produto cadastrato com sucesso", "/admin-produtos");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.openModalMensagem(error, "/admin-produtos");
+                    });
+            }
+            else {
+                await api.post("/Produto/salvar", produtoCadastrar)
+                    .then((res) => {
+                        console.log(res);
+                        var produto = res.data.result;
+                        let indexProdutoSubstituir = this.state.produtos.map(item => { return item.idProduto }).indexOf(produtoCadastrar.idProduto);
+                        var produtosAtualizar = this.state.produtos;
+
+                        if (produto.idProduto > 0) {
+                            produtosAtualizar.splice(indexProdutoSubstituir, 1, produto);
+                            this.setState(() => {
+                                return {
+                                    produtos: produtosAtualizar
+                                };
+                            });
+                            this.closeSpinner();
+                            this.openModalMensagem("Produto editado com sucesso", "/admin-produtos");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.openModalMensagem(error, "/admin-produtos");
+                    });
+            }
         }
         catch (error) {
             console.log(error);

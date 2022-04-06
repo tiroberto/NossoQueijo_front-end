@@ -14,6 +14,12 @@ export default class CadastroProduto extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
+                        var inputNome = event.target.elements.inputNome;
+                        var inputQuantidade = event.target.elements.inputQuantidade;
+                        var inputPreco = event.target.elements.inputPreco;
+                        var inputPeso = event.target.elements.inputPeso;
+                        var inputImagem = event.target.elements.inputImagem;
+                        
                         let resultVerificacao = false;
 
                         for (var i = 0; i < cadastroProdutoInputs.length; i++) {

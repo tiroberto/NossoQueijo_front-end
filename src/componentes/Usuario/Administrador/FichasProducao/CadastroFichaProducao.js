@@ -20,7 +20,15 @@ export default class CadastroFichaProducao extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
-                        let resultVerificacao = false;
+                        var inputData = event.target.elements.inputData;
+                        var selectUsuario = event.target.elements.selectUsuario;
+                        var inputVolumePingo = event.target.elements.inputVolumePingo;
+                        var inputVolumeLeite = event.target.elements.inputVolumeLeite;
+                        var inputVolumeCoalho = event.target.elements.inputVolumeCoalho;
+                        var inputQntdSal = event.target.elements.inputQntdSal;
+                        var inputQntdProduzida = event.target.elements.inputQntdProduzida;
+                        var selectProduto = event.target.elements.selectProduto;
+                        let resultVerificacao = false;                    
 
                         for (var i = 0; i < cadastroFichaProducaoInputs.length; i++) {
                             if (cadastroFichaProducaoInputs[i].resultVerificacao) {

@@ -17,18 +17,6 @@ export default class Produtos extends Component {
                     {value => {
                         const { produtos, dataCSV, formasPagamento, filtroProdutosAdmin, usuariosList, listarProdutosFiltro, ProdutosListadosFiltro } = value;
 
-                        const send = (event) => {
-                            event.preventDefault();
-                            var select = document.querySelector("select[id=selectFiltro]");
-                            console.log(select.value);
-
-                            if (select.value != null || select.value != "" || typeof select.value != "undefined") {
-                                listarProdutosFiltro(selectFiltro.value);
-                            }
-                            else
-                                console.log("erro");
-                        }
-
                         return (
                             <div className="container py-5 background-white">
                                 <div className="col-6 ml-auto">

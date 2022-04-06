@@ -15,6 +15,14 @@ export default class EditarEndereco extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
+                        var inputLogradouro = event.target.elements.inputLogradouro;
+                        var inputNumero = event.target.elements.inputNumero;
+                        var inputBairro = event.target.elements.inputBairro;
+                        var inputComplemento = event.target.elements.inputComplemento;
+                        var inputCEP = event.target.elements.inputCEP;
+                        var selectCidade = event.target.elements.selectCidade;
+                        var selectEstado = event.target.elements.selectEstado;
+
                         let resultVerificacao = false;
 
                         for (var i = 0; i < editarEnderecoInputs.length; i++) {
@@ -35,7 +43,7 @@ export default class EditarEndereco extends Component {
                                 bairro: inputBairro.value,
                                 complemento: inputComplemento.value,
                                 cep: inputCEP.value.replace(/\D/g, ""),
-                                cidade: { idCidade: selectCidade.value }
+                                cidade: { idCidade: selectCidade.value, estado: { idEstado: selectEstado.value } }
                             };
                             handleSubmitEditarEndereco(novoEnderecoSalvar);
                         }

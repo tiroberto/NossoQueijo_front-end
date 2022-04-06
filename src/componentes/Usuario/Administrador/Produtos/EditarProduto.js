@@ -15,6 +15,12 @@ export default class EditarProduto extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
+                        var inputNome = event.target.elements.inputNome;
+                        var inputQuantidade = event.target.elements.inputQuantidade;
+                        var inputPreco = event.target.elements.inputPreco;
+                        var inputPeso = event.target.elements.inputPeso;
+                        var inputImagem = event.target.elements.inputImagem;
+
                         let resultVerificacao = false;
 
                         for (var i = 0; i < cadastroProdutoInputs.length; i++) {
@@ -28,14 +34,13 @@ export default class EditarProduto extends Component {
 
                         if (resultVerificacao) {
                             const ProdutoSalvar = {
-                                idProduto: 0,
+                                idProduto: idProduto,
                                 nome: inputNome.value,
                                 qntdEstoque: inputQuantidade.value,
                                 preco: inputPreco.value,
                                 peso: inputPeso.value,
                                 imagem: inputImagem.value
                             };
-                            console.log(ProdutoSalvar);
                             value.handleSubmitCadastroProduto(ProdutoSalvar);
                         }
                         else
@@ -79,6 +84,12 @@ export default class EditarProduto extends Component {
                                                                     <span>{peso}kg</span>
                                                                 </div>
                                                                 <div className="col-6">
+                                                                    Estoque:
+                                                                </div>
+                                                                <div className="col-6 div-data">
+                                                                    <span>{qntdEstoque}kg</span>
+                                                                </div>
+                                                                <div className="col-6">
                                                                     Imagem:
                                                                 </div>
                                                                 <div className="col-6 div-data">
@@ -92,6 +103,7 @@ export default class EditarProduto extends Component {
                                                                 <h5 className="text-center div-title">Novo</h5>
                                                                 <div className="div-inputs-form">
                                                                     <div className="row div-row">
+                                                                        <input type="text" value={idProduto} onChange={() => { }} className="form-control" hidden="true" id="inputIdProduto" name="inputIdProduto" />
                                                                         <div className="col-2 div-campo">
                                                                             Nome:
                                                                         </div>

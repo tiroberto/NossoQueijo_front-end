@@ -28,19 +28,20 @@ export default class FichasProducao extends Component {
 
                     const send = (event) => {
                         event.preventDefault();
-                        var selectUsuario = document.querySelector("select[id=selectUsuario]");
-                        var periodoInicio = document.querySelector("input[id=PeriodoInicio]");
-                        var periodoFim = document.querySelector("input[id=PeriodoFim]");
+                        var selectUsuario = event.target.elements.selectUsuario;
+                        var periodoInicial = event.target.elements.PeriodoInicio;
+                        var periodoFinal = event.target.elements.PeriodoFim;
                         var data = {};
 
                         if (filtroFichaProducao == "periodo") {
-                            if (periodoFim.value && periodoInicio.value) {
-                                data = { periodoInicio: PeriodoInicio.value, periodoFim: PeriodoFim.value };
+                            if (periodoFinal.value != "" || periodoFinal.value != typeof undefined || periodoFinal.value != null && 
+                            periodoInicial.value != "" || periodoInicial.value != typeof undefined || periodoInicial.value != null ) {
+                                data = { periodoInicio: periodoInicial.value, periodoFim: periodoFinal.value };
                                 listarFichasProducaoFiltro(data);
                             }
                         }
                         else if (filtroFichaProducao == "usuario") {
-                            if (selectUsuario.value) {
+                            if (selectUsuario.value != "" || selectUsuario.value != typeof undefined || selectUsuario.value != null ) {
                                 data = { idUsuario: selectUsuario.value };
                                 listarFichasProducaoFiltro(data);
                             }
