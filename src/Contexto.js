@@ -264,8 +264,6 @@ class ProdutoProvider extends Component {
     componentDidMount() {
         this.setProdutos();
         this.setFormasPagamento();
-        //this.handleSubmitLogin({ email: "cliente@cliente.com", senha: "clientecliente123" });
-        //this.handleSubmitLogin({ email: "humbertojrpratinha@gmail.com", senha: "418951230hj" });
         this.setCidades();
         this.setEstados();
         this.setStatus();
