@@ -10,7 +10,7 @@ export default class CadastroFichaProducao extends Component {
         return (
             <ProdutoConsumer>
                 {value => {
-                    const { cadastroFichaProducaoInputs, usuariosList, produtos } = value;
+                    const { cadastroFichaProducaoInputs, usuariosList, produtos, openModalMensagem } = value;
 
                     var usuariosPermitidos = [];
                     for (var i = 0; i < usuariosList.length; i++) {

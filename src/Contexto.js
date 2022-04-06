@@ -1064,7 +1064,7 @@ class ProdutoProvider extends Component {
                             this.openModalMensagem("Excluído com sucesso!", "/admin-pedidos");
                         }
                         else {
-                            throw error;
+                            throw "error";
                         }
                     }
                 })

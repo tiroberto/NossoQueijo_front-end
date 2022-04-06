@@ -10,6 +10,7 @@ export default function CartTotal({ value }) {
 
     const send = (event) => {
         event.preventDefault();
+        var inputCEP = event.target.elements.inputCEP;
 
         if (inputCEP.value) {
             calcularFrete();
