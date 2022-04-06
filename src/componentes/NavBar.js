@@ -22,7 +22,7 @@ export default class NavBar extends Component {
                                 <ul className="navbar-nav nav">
                                     <li className="nav-item ml-5">
                                         <Link to="/" className="nav-link">
-                                            Produtos
+                                            Pagina inicial
                                         </Link>
                                     </li>
                                 </ul>
@@ -47,7 +47,7 @@ export default class NavBar extends Component {
                             </div>
                             <div className="navbar-collapse collapse">
                                 <Link to="/user" className="ml-auto">
-                                    <button className="btn-perfil">
+                                    <button className="BUTTON_TRS">
                                         <span className="m-2">
                                             <i className="fas fa-user" />
                                         </span>
@@ -90,25 +90,30 @@ background: var(--mainDark);
 .search-btn:hover{
     cursor: pointer;
 }
-.btn-perfil{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.4rem;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    cursor: pointer;
-    align: right;
+
+.BUTTON_TRS {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    background-color: #3D94F6;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 0.6rem;
     margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightGreen);
-    color: var(--lightGreen);
-}
-.btn-perfil:hover{
-    background: var(--lightGreen);
-    color: var(--mainWhite);
-}
-.btn-perfil:focus{
-    outline: none;
-}
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+ }
+ 
+ .BUTTON_TRS:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;

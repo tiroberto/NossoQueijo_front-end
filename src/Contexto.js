@@ -7,8 +7,14 @@ const ProdutoContexto = React.createContext();
 
 class ProdutoProvider extends Component {
     state = {
+        modalExcluirNomeEntidade: "",
+        modalIdExcluir: 0,
+        modalExcluirOpen: false,
+        detalhesProdutoAdmin: Object,
         enderecoPedidoSelecionado: Object,
         valorFreteConsultado: 0,
+        resultadoConsultaCorreios: { Valor: 0 },
+        freteConsultado: false,
         produtosListaBusca: [],
         pathModalMensagem: "",
         dataFichaProducaoCSV: [],
@@ -91,6 +97,45 @@ class ProdutoProvider extends Component {
             },
             {
                 input: "password",
+                error: "",
+                inputValue: "",
+                errorNotVisible: true,
+                resultVerificacao: false
+            }
+        ],
+        cadastroProdutoInputs: [
+            {
+                input: "nome",
+                error: "",
+                inputValue: "",
+                errorNotVisible: true,
+                resultVerificacao: false
+            },
+            {
+                input: "preco",
+                error: "",
+                inputValue: "",
+                errorNotVisible: true,
+                resultVerificacao: false
+            },
+            {
+                input: "peso",
+                error: "",
+                inputValue: "",
+                errorNotVisible: true,
+                resultVerificacao: false
+            }
+            ,
+            {
+                input: "quantidade",
+                error: "",
+                inputValue: "",
+                errorNotVisible: true,
+                resultVerificacao: false
+            }
+            ,
+            {
+                input: "linkImagem",
                 error: "",
                 inputValue: "",
                 errorNotVisible: true,
@@ -221,8 +266,8 @@ class ProdutoProvider extends Component {
         this.setFormasPagamento();
         //this.handleSubmitLogin({ email: "cliente@cliente.com", senha: "clientecliente123" });
         //this.handleSubmitLogin({ email: "humbertojrpratinha@gmail.com", senha: "418951230hj" });
-        this.setEstados();
         this.setCidades();
+        this.setEstados();
         this.setStatus();
         this.setUsuarios();
         this.setFichasProducao();
@@ -312,6 +357,7 @@ class ProdutoProvider extends Component {
         try {
             await api.get('/Estado/listar')
                 .then(res => {
+                    console.log(res.data);
                     this.setState({ estados: res.data });
                 })
                 .catch(err => {
@@ -327,6 +373,7 @@ class ProdutoProvider extends Component {
         var inputCliente = document.querySelector(`input[id=rdCliente]`);
         var inputStatus = document.querySelector(`input[id=rdStatus]`);
         var inputFormaPagamento = document.querySelector(`input[id=rdFormaPagamento]`);
+        var inputPeriodo = document.querySelector(`input[id=rdPeriodo]`);
 
         if (input == "rdCliente") {
             this.setState(() => {
@@ -334,6 +381,7 @@ class ProdutoProvider extends Component {
             });
             inputStatus.checked = false;
             inputFormaPagamento.checked = false;
+            inputPeriodo.checked = false;
         }
         else if (input == "rdStatus") {
             this.setState(() => {
@@ -341,6 +389,7 @@ class ProdutoProvider extends Component {
             });
             inputCliente.checked = false;
             inputFormaPagamento.checked = false;
+            inputPeriodo.checked = false;
         }
         else if (input == "rdFormaPagamento") {
             this.setState(() => {
@@ -348,6 +397,15 @@ class ProdutoProvider extends Component {
             });
             inputStatus.checked = false;
             inputCliente.checked = false;
+            inputPeriodo.checked = false;
+        }
+        else if (input == "rdPeriodo") {
+            this.setState(() => {
+                return { filtroPedidosAdmin: "periodo" };
+            });
+            inputStatus.checked = false;
+            inputCliente.checked = false;
+            inputFormaPagamento.checked = false;
         }
     };
 
@@ -374,6 +432,7 @@ class ProdutoProvider extends Component {
             this.openSpinner();
             await api.get('/Produto/listar')
                 .then(res => {
+                    console.log(res.data);
                     this.setState({ produtos: res.data });
                 })
                 .catch(err => {
@@ -390,7 +449,12 @@ class ProdutoProvider extends Component {
 
 
 
-
+    handleDetalheProdutoAdmin = idProduto => {
+        const produto = this.state.produtos.find(item => item.idProduto === idProduto);
+        this.setState(() => {
+            return { detalhesProdutoAdmin: produto };
+        });
+    };
 
     handleDetalheFichaProducao = idFichaProducao => {
         const fichaProducao = this.state.fichaProducaoList.find(item => item.idFichaProducao === idFichaProducao);
@@ -476,15 +540,51 @@ class ProdutoProvider extends Component {
     };
 
     handleEnderecoPedido = (idEndereco) => {
-        const endereco = this.state.resultLogin.enderecos.find(item => item.idEndereco == idEndereco);
-        this.setState(() => {
-            return { enderecoPedidoSelecionado: endereco };
-        });
+        try {
+            this.openSpinner();
+            const endereco = this.state.resultLogin.enderecos.find(item => item.idEndereco == idEndereco);
+            const valorFrete = this.calcularFreteComParametro(endereco.cep);
+            console.log(endereco);
+            this.setState(() => {
+                return { enderecoPedidoSelecionado: endereco, resultadoConsultaCorreios: valorFrete, freteConsultado: true };
+            });
+            this.closeSpinner();
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
 
 
+    handleDeleteProdutoAdmin = async (idProduto) => {
+        try {
+            this.openSpinner();
 
+            await api.delete(`/Produto/excluir?id=${idProduto}`)
+                .then((res) => {
+                    console.log(res);
+                    if (res.data.isValid) {
+                        let indexProdutoExcluir = this.state.produtos.map(item => { return item.idProduto }).indexOf(idProduto);
+                        let produtosAntigo = this.state.produtos;
+                        if (indexProdutoExcluir > -1)
+                            produtosAntigo.splice(indexProdutoExcluir, 1);
+                        const produtosAtualizar = produtosAntigo;
+                        this.setState(() => {
+                            return { produtos: produtosAtualizar };
+                        });
+                        this.closeSpinner();
+                        this.openModalMensagem("Excluído com sucesso!", "/admin-produtos")
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
 
     handleSubmitCadastroFichaProducao = async (fichaProducaoSalvar) => {
         try {
@@ -516,19 +616,22 @@ class ProdutoProvider extends Component {
                 await api.post("/FichaProducao/salvar", fichaProducaoSalvar)
                     .then((res) => {
                         console.log(res);
-                        fichaProducaoSalvar.idFichaProducao = res.data.result.idFichaProducao;
-                        fichaProducaoListAntigo.push(fichaProducaoSalvar);
-                        var fichaProducaoListAtualizar = fichaProducaoListAntigo;
-                        console.log(fichaProducaoListAtualizar);
-                        this.setState(() => {
-                            return { fichaProducaoList: fichaProducaoListAtualizar };
-                        });
+                        var fichaProducao = res.data.result;
+
+                        if (fichaProducao.idFichaProducao > 0) {
+                            fichaProducaoListAntigo.push(fichaProducao);
+                            var fichaProducaoListAtualizar = fichaProducaoListAntigo;
+                            this.setState(() => {
+                                return { fichaProducaoList: fichaProducaoListAtualizar };
+                            });
+                            this.openModalMensagem("Ficha de produção cadastrada com sucesso!", "/admin-fichasproducao");
+                            this.closeSpinner();
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
                     });
             }
-            this.closeSpinner();
         }
         catch (error) {
             console.log(error);
@@ -593,32 +696,37 @@ class ProdutoProvider extends Component {
             this.openSpinner();
             await api.post(`/Usuario/login?email=${usuarioLogin.email}&senha=${usuarioLogin.senha}`)
                 .then(res => {
-                    var resultLogin = res.data;
-                    if (resultLogin.usuario.tipoUsuario.idTipoUsuario == 1)
-                        var menuAdminShow = true;
-                    this.setState(() => {
-                        return { resultLogin: res.data, menuAdminShow: menuAdminShow };
-                    });
-                    console.log(res);
+                    if (!res.data.logado && (res.data.token == "")) {
+                        this.closeSpinner();
+                        this.openModalMensagem("Usuário ou senha inválidos!", "/login")
+                    }
+                    else {
+                        this.closeSpinner();
+                        this.openModalMensagem("Login efetuado com sucesso!", "/user");
+                        if (res.data.usuario.tipoUsuario.idTipoUsuario == 1)
+                            var menuAdminShow = true;
+                        this.setState(() => {
+                            return { resultLogin: res.data, menuAdminShow: menuAdminShow };
+                        });
+                        console.log(res);
+                    }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-            this.closeSpinner();
-            this.openModalMensagem("Login efetuado com sucesso!", "/user");
         }
         catch (error) {
             console.log(error);
         }
     };
 
-    listarPedidosFiltro = async (idFiltro) => {
+    listarPedidosFiltro = async (data) => {
         try {
             this.openSpinner();
             if (this.state.filtroPedidosAdmin == "cliente") {
-                await api.get(`/Pedido/listar-por-usuario?idUsuario=${idFiltro}`)
+                await api.get(`/Pedido/listar-por-usuario?idUsuario=${data.idFiltro}`)
                     .then(res => {
-                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: idFiltro });
+                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
                         console.log(res.data);
                     })
                     .catch(err => {
@@ -627,9 +735,9 @@ class ProdutoProvider extends Component {
                 this.handleDataCSV();
             }
             else if (this.state.filtroPedidosAdmin == "status") {
-                await api.get(`/Pedido/listar-por-status?idStatus=${idFiltro}`)
+                await api.get(`/Pedido/listar-por-status?idStatus=${data.idFiltro}`)
                     .then(res => {
-                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: idFiltro });
+                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
                         console.log(res.data);
                     })
                     .catch(err => {
@@ -638,9 +746,20 @@ class ProdutoProvider extends Component {
                 this.handleDataCSV();
             }
             else if (this.state.filtroPedidosAdmin == "formaPagamento") {
-                await api.get(`/Pedido/listar-por-formapagamento?idFormaPagamento=${idFiltro}`)
+                await api.get(`/Pedido/listar-por-formapagamento?idFormaPagamento=${data.idFiltro}`)
                     .then(res => {
-                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: idFiltro });
+                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
+                        console.log(res.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                this.handleDataCSV();
+            }
+            else if (this.state.filtroPedidosAdmin == "periodo") {
+                await api.get(`/Pedido/listar-por-periodo?inicio=${data.dataInicial}&fim=${data.dataFinal}`)
+                    .then(res => {
+                        this.setState({ pedidosListadosFiltro: res.data.result });
                         console.log(res.data);
                     })
                     .catch(err => {
@@ -719,17 +838,24 @@ class ProdutoProvider extends Component {
             await api.post("/Usuario/salvar", usuarioSalvar)
                 .then((res) => {
                     console.log(res);
-                    usuarioSalvar.idUsuario = res.data.result.idUsuario;
-                    usuariosListAtualizar.push(usuarioSalvar);
-                    this.setState(() => {
-                        return { usuariosList: usuariosListAtualizar };
-                    })
+                    var usuario = res.data.result;
+
+                    if (usuario.idUsuario > 0) {
+                        usuariosListAtualizar.push(usuario);
+                        this.setState(() => {
+                            return { usuariosList: usuariosListAtualizar };
+                        });
+                        this.closeSpinner();
+                        this.openModalMensagem(res.data.message, "/login");
+                    }
+                    else {
+                        this.openModalMensagem("Erro", "/login");
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            this.closeSpinner();
-            this.openModalMensagem("Cadastrado com sucesso!", "/login");
+
         }
         catch (error) {
             console.log(error);
@@ -740,10 +866,12 @@ class ProdutoProvider extends Component {
         try {
             this.openSpinner();
             const tempPedidoProdutos = this.state.carrinho;
+            const usuarioLogadoPedido = this.state.resultLogin.usuario;
             var pedido = {
                 idPedido: 0,
-                usuario: { idUsuario: 1 },
-                valorFrete: 25,
+                usuario: usuarioLogadoPedido,
+                valorFrete: parseFloat(this.state.resultadoConsultaCorreios.Valor),
+                data: new Date(),
                 formaPagamento: this.state.formaPagamentoSelecionada,
                 enderecoEntrega: this.state.enderecoPedidoSelecionado,
                 status: { idStatus: 7 },
@@ -782,7 +910,6 @@ class ProdutoProvider extends Component {
                     pedido.pedidoProdutos[i].produto = produto;
                 }
                 resultLoginAtualizar.pedidos.push(pedido);
-                console.log(resultLoginAtualizar);
                 this.closeSpinner();
                 this.openModalMensagem("Pedido realizado!", "/");
             }
@@ -826,7 +953,7 @@ class ProdutoProvider extends Component {
         catch (error) {
             console.log(error);
         }
-    }
+    };
 
     handleDeleteFichaProducao = async (idFichaProducao) => {
         try {
@@ -853,12 +980,101 @@ class ProdutoProvider extends Component {
             console.log(error);
             this.openModalMensagem("Acho que não deu certo!", "/admin-fichasproducao");
         }
-    }
+    };
+
+    handleSubmitCadastroProduto = async (produtoCadastrar) => {
+        try {
+            this.openSpinner();
+            var produto = {
+                idProduto: 0,
+                nome: produtoCadastrar.nome,
+                qntdEstoque: produtoCadastrar.qntdEstoque,
+                preco: produtoCadastrar.preco,
+                peso: produtoCadastrar.peso,
+                imagem: produtoCadastrar.imagem
+            };
+
+            await api.post("/Produto/salvar", produto)
+                .then((res) => {
+                    console.log(res);
+                    var produto = res.data.result;
+                    var produtosAtualizar = this.state.produtos;
+
+                    if (produto.idProduto > 0) {
+                        produtosAtualizar.push(produto);
+                        this.setState(() => {
+                            return {
+                                produtos: produtosAtualizar
+                            };
+                        });
+                        this.closeSpinner();
+                        this.openModalMensagem("Produto cadastrato com sucesso", "/admin-produtos");
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.openModalMensagem(error, "/admin-produtos");
+                });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
+
+    handleDeletePedido = async (idPedido) => {
+        try {
+            this.openSpinner();
+            await api.delete(`/Pedido/excluir?id=${idPedido}`)
+                .then((res) => {
+                    console.log(res);
+                    if (res.data.result) {
+                        let indexPedidoExcluir = this.state.pedidosListadosFiltro.map(item => { return item.idPedido }).indexOf(idPedido);
+                        let pedidosListadosFiltroAntigo = this.state.pedidosListadosFiltro;
+                        if (indexPedidoExcluir > -1) {
+                            pedidosListadosFiltroAntigo.splice(indexPedidoExcluir, 1);
+                            this.setState(() => {
+                                return { pedidosListadosFiltro: pedidosListadosFiltroAntigo };
+                            });
+                            this.closeSpinner();
+                            this.openModalMensagem("Excluído com sucesso!", "/admin-pedidos");
+                        }
+                        else {
+                            throw error;
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            this.closeSpinner();
+        }
+        catch (error) {
+            console.log(error);
+            this.openModalMensagem("Erro", "/admin-pedidos");
+        }
+    };
 
 
 
 
+    handleChangeCadastroProduto = () => {
+        let inputs = this.state.cadastroProdutoInputs;
+        let inputNome = document.querySelector("input[id=inputNome]");
+        let inputPreco = document.querySelector("input[id=inputPreco]");
+        let inputPeso = document.querySelector("input[id=inputPeso]");
+        let inputQuantidade = document.querySelector("input[id=inputQuantidade]");
+        let inputImagem = document.querySelector("input[id=inputImagem]");
 
+        inputs[0].inputValue = inputNome.value;
+        inputs[1].inputValue = inputPreco.value;
+        inputs[2].inputValue = inputPeso.value;
+        inputs[3].inputValue = inputQuantidade.value;
+        inputs[4].inputValue = inputImagem.value;
+        this.setState({
+            cadastroProdutoInputs: inputs
+        });
+        this.validateInputsCadastroProduto();
+    };
 
     handleChangeCadastroFichaProducao = () => {
         let inputs = this.state.cadastroFichaProducaoInputs;
@@ -981,7 +1197,31 @@ class ProdutoProvider extends Component {
 
 
 
+    validateInputsCadastroProduto = () => {
+        const cadastroProdutoInputs = this.state.cadastroProdutoInputs;
 
+        for (var i = 0; i < cadastroProdutoInputs.length; i++) {
+            if (cadastroProdutoInputs[i].inputValue === "") {
+                cadastroProdutoInputs[i].error = "Campo obrigatório";
+                cadastroProdutoInputs[i].errorNotVisible = false;
+                cadastroProdutoInputs[i].resultVerificacao = false;
+            }
+            else {
+                cadastroProdutoInputs[i].errorNotVisible = true;
+                cadastroProdutoInputs[i].resultVerificacao = true;
+            }
+        }
+
+        if (cadastroProdutoInputs[3].inputValue <= 0) {
+            cadastroProdutoInputs[3].error = "Valor deve ser maior que 0";
+            cadastroProdutoInputs[3].errorNotVisible = false;
+            cadastroProdutoInputs[3].resultVerificacao = false;
+        }
+
+        this.setState(() => {
+            return { cadastroProdutoInputs: cadastroProdutoInputs };
+        });
+    };
 
     validateFormEditarEndereco = () => {
         const editarEnderecoInputs = this.state.editarEnderecoInputs;
@@ -1168,11 +1408,73 @@ class ProdutoProvider extends Component {
         return sCep;
     };
 
+    calcularFreteComParametro = async (cep) => {
+        try {
+            this.openSpinner();
+            const queryString = require('query-string');
+            var pesoPedido = 0;
+            for (let i = 0; i < this.state.carrinho.length; i++) {
+                pesoPedido += this.state.carrinho[i].peso;
+            }
+
+            let args = {
+                // Não se preocupe com a formatação dos valores de entrada do cep, qualquer uma será válida (ex: 21770-200, 21770 200, 21asa!770@###200 e etc),
+                sCepOrigem: "38960000",
+                sCepDestino: this.sanitization(cep),
+                nVlPeso: `${pesoPedido}`,
+                nCdFormato: 1,
+                nVlComprimento: 20,
+                nVlAltura: 20,
+                nVlLargura: 20,
+                nCdServico: '04510', //Array com os códigos de serviço 04510 pac 04014 sedex
+                nVlDiametro: 20,
+            };
+            const content = {
+                nCdEmpresa: "",
+                nDsSenha: "",
+                sCepOrigem: args.sCepOrigem,
+                sCepDestino: args.sCepDestino,
+                nVlPeso: args.nVlPeso,
+                nCdFormato: args.nCdFormato,
+                nVlComprimento: args.nVlComprimento,
+                nVlAltura: args.nVlAltura,
+                nVlLargura: args.nVlLargura,
+                sCdMaoPropria: "N",
+                nVlValorDeclarado: "0",
+                sCdAvisoRecebimento: "N",
+                nCdServico: args.nCdServico,
+                nVlDiametro: args.nVlDiametro,
+                StrRetorno: "xml",
+                nIndicaCalculo: "3"
+            };
+
+            axios.post('https://private-cors-server.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
+                queryString.stringify(content),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(res => {
+                    console.log(res);
+                    const json = this.converterXMLparaJSON(res.data);
+                    this.setState(() => {
+                        return { resultadoConsultaCorreios: json.Servicos.cServico, freteConsultado: true };
+                    });
+                    console.log(this.state.resultadoConsultaCorreios);
+                    this.calculaTotal();
+                }).catch(err => { console.log(err) });
+
+            this.closeSpinner();
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+
     calcularFrete = async () => {
         try {
             this.openSpinner();
-            let Correios = require("node-correios");
-            let correios = new Correios();
+            const queryString = require('query-string');
             const inputCEP = document.querySelector("input[id=inputCEP]");
             var pesoPedido = 0;
             for (let i = 0; i < this.state.carrinho.length; i++) {
@@ -1180,47 +1482,53 @@ class ProdutoProvider extends Component {
             }
 
             let args = {
-                nCdServico: "04014,04510",
-                sCepOrigem: "38960000",
-                sCepDestino: this.sanitization(inputCEP.value),
-                nCdFormato: "1",
-                nVlPeso: pesoPedido,
-                nVlComprimento: "20",
-                nVlAltura: "20",
-                nVlLargura: "20",
-                nVlDiametro: "20"
-                // demais parâmetros ...
-            }
-
-            /*
-            let args = {
                 // Não se preocupe com a formatação dos valores de entrada do cep, qualquer uma será válida (ex: 21770-200, 21770 200, 21asa!770@###200 e etc),
                 sCepOrigem: "38960000",
                 sCepDestino: this.sanitization(inputCEP.value),
-                nVlPeso: pesoPedido,
-                nCdFormato: '1',
-                nVlComprimento: '20',
-                nVlAltura: '20',
-                nVlLargura: '20',
-                nCdServico: ['04014', '04510'], //Array com os códigos de serviço
-                nVlDiametro: '0',
+                nVlPeso: `${pesoPedido}`,
+                nCdFormato: 1,
+                nVlComprimento: 20,
+                nVlAltura: 20,
+                nVlLargura: 20,
+                nCdServico: '04510', //Array com os códigos de serviço 04510 pac 04014 sedex
+                nVlDiametro: 20,
             };
-            const response = await args.nCdServico.map(item => {
-                axios.get(`http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=&sDsSenha=&sCdAvisoRecebimento=n&sCdMaoPropria=n&nVlValorDeclarado=0&nVlDiametro=0&StrRetorno=xml&nIndicaCalculo=3&nCdFormato=1
-                &nCdServico=${item}
-                &sCepOrigem=${args.sCepOrigem}
-                &sCepDestino=${args.sCepDestino}
-                %nVlPeso=${args.pesoPedido}`);
-            });*/            
+            const content = {
+                nCdEmpresa: "",
+                nDsSenha: "",
+                sCepOrigem: args.sCepOrigem,
+                sCepDestino: args.sCepDestino,
+                nVlPeso: args.nVlPeso,
+                nCdFormato: args.nCdFormato,
+                nVlComprimento: args.nVlComprimento,
+                nVlAltura: args.nVlAltura,
+                nVlLargura: args.nVlLargura,
+                sCdMaoPropria: "N",
+                nVlValorDeclarado: "0",
+                sCdAvisoRecebimento: "N",
+                nCdServico: args.nCdServico,
+                nVlDiametro: args.nVlDiametro,
+                StrRetorno: "xml",
+                nIndicaCalculo: "3"
+            };
 
-            correios.calcPreco(args)
-                .then(result => {
-                    console.log(result);
-                    //const response = result;
-                })
-                .catch(error => {
-                    console.log(error)
-                });
+            axios.post('https://private-cors-server.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
+                queryString.stringify(content),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(res => {
+                    console.log(res);
+                    const json = this.converterXMLparaJSON(res.data);
+                    this.setState(() => {
+                        return { resultadoConsultaCorreios: json.Servicos.cServico, freteConsultado: true };
+                    });
+                    console.log(this.state.resultadoConsultaCorreios);
+                    this.calculaTotal();
+                }).catch(err => { console.log(err) });
+
+
 
             //console.log(response);
 
@@ -1240,6 +1548,10 @@ class ProdutoProvider extends Component {
         for (var i = 0; i < this.state.carrinho.length; i++) {
             totalCarrinho += this.state.carrinho[i].total;
         }
+
+        if (this.state.freteConsultado)
+            totalCarrinho += parseFloat(this.state.resultadoConsultaCorreios.Valor);
+
         return totalCarrinho;
     };
 
@@ -1286,11 +1598,23 @@ class ProdutoProvider extends Component {
         });
     };
 
+    openModalExcluir = (idExcluir, nomeEntidadeExcluir) => {
+        this.setState(() => {
+            return { modalExcluirOpen: true, modalIdExcluir: idExcluir, modalExcluirNomeEntidade: nomeEntidadeExcluir };
+        });
+    };
+
     closeModalMensagem = () => {
         this.setState(() => {
             return { modalMensagemOpen: false, mensagemModalMensagem: "", pathModalMensagem: "" };
         });
         return true;
+    };
+
+    closeModalExcluir = () => {
+        this.setState(() => {
+            return { modalExcluirOpen: false, modalIdExcluir: 0, modalExcluirNomeEntidade: "" };
+        });
     };
 
     closeModal = () => {
@@ -1392,6 +1716,34 @@ class ProdutoProvider extends Component {
         }
     };
 
+    mascaraNumeros = (mask, input) => {
+        var t = document.querySelector(`input[id=${input}]`);
+        var input = t.value;
+
+        if (isNaN(input[input.length - 1])) { // impede entrar outro caractere que não seja número
+            t.value = input.substring(0, input.length - 1);
+            return;
+        }
+
+        var i = t.value.length;
+        var saida = mask.substring(1, 0);
+        var texto = mask.substring(i)
+        if (texto.substring(0, 1) != saida) {
+            t.value += texto.substring(0, 1);
+        }
+    };
+
+    converterXMLparaJSON = (xml) => {
+        const json = {};
+        for (const res of xml.matchAll(/(?:<(\w*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<(\w*)(?:\s*)*\/>/gm)) {
+            const key = res[1] || res[3];
+            const value = res[2] && this.converterXMLparaJSON(res[2]);
+            json[key] = ((value && Object.keys(value).length) ? value : res[2]) || null;
+
+        }
+        return json;
+    };
+
     openSpinner = () => {
         this.setState(() => {
             return { spinnerOpen: true };
@@ -1430,6 +1782,7 @@ class ProdutoProvider extends Component {
                 handleChangeCadastro: this.handleChangeCadastro,
                 handleSubmitCadastroUsuario: this.handleSubmitCadastroUsuario,
                 mascaraCPF: this.mascaraCPF,
+                mascaraNumeros: this.mascaraNumeros,
                 calcularValorTotalPedido: this.calcularValorTotalPedido,
                 calcularTotalProdutosPedido: this.calcularTotalProdutosPedido,
                 handleDetalhePedido: this.handleDetalhePedido,
@@ -1459,7 +1812,14 @@ class ProdutoProvider extends Component {
                 listarFichasProducaoFiltro: this.listarFichasProducaoFiltro,
                 setFiltroListagemFichaProducao: this.setFiltroListagemFichaProducao,
                 handleBuscaProdutos: this.handleBuscaProdutos,
-                handleEnderecoPedido: this.handleEnderecoPedido
+                handleEnderecoPedido: this.handleEnderecoPedido,
+                handleDetalheProdutoAdmin: this.handleDetalheProdutoAdmin,
+                handleDeleteProdutoAdmin: this.handleDeleteProdutoAdmin,
+                handleChangeCadastroProduto: this.handleChangeCadastroProduto,
+                handleSubmitCadastroProduto: this.handleSubmitCadastroProduto,
+                openModalExcluir: this.openModalExcluir,
+                closeModalExcluir: this.closeModalExcluir,
+                handleDeletePedido: this.handleDeletePedido
             }}>
                 {this.props.children}
             </ProdutoContexto.Provider>

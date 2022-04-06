@@ -4,7 +4,7 @@ import { ProdutoContexto } from './Contexto';
 
 
 export const PrivateRouter = ({ component: Component, ...rest }) => {
-    const value = useContext(ProdutoContexto);    
+    const value = useContext(ProdutoContexto);
     const isAuthenticated = () => value.resultLogin.token;
     return (
         <Route

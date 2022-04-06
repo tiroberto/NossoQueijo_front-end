@@ -9,24 +9,26 @@ export default function StatusPedido(item) {
 
     return (
         <StatusPedidoWrapper>
-            <div className="card">
+            <div className="card container px-2">
                 <div className="div-title mt-2">
                     <h5>Status pedido</h5>
                 </div>
-                <ButtonWrapper className="btn-editar" onClick={() => { openEditarModal(); }}>
-                    <span className="m-2">
-                        <i className="fa fa-pencil" />
-                    </span>
-                    Editar
-                </ButtonWrapper>
-                <div className="container mt-4">
-                    <div className="row align-items-center">
-                        <div className="col-6 p-4 text-center">
-                            <h4>{descricao}</h4>
-                        </div>
-                        <div className="col-6 p-4 text-center">
-                            <img src={imagem} alt="status" />
-                        </div>
+                <div className="row">
+                    <div className="col-12 d-flex align-items-center flex-column">
+                        <button className="edit-btn" onClick={() => { openEditarModal(); }}>
+                            <span className="m-2">
+                                <i className="fa fa-pencil" />
+                            </span>
+                            Editar
+                        </button>
+                    </div>
+                </div>
+                <div className="row my-2 align-items-center">
+                    <div className="col-6 p-4 text-center">
+                        <h4>{descricao}</h4>
+                    </div>
+                    <div className="col-6 p-4 text-center">
+                        <img src={imagem} alt="status" />
                     </div>
                 </div>
             </div>
@@ -34,38 +36,11 @@ export default function StatusPedido(item) {
     );
 }
 
-const ButtonWrapper = styled.button`
-text-align: center;
-text-transform: capitalized;
-background: transparent;
-font-size: 1.2rem;
-border: 0.05rem solid;
-border-radius: 0.5rem;
-padding: 0.2rem 0.5rem;
-cursor: pointer;
-margin: 0.8rem 5rem 0.2rem 5rem;
-transition: all 0.5s ease-in-out;
-border-color: var(--mainGreen);
-color: var(--mainGreen);
-:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-:focus{
-    outline: none;
-}
-`;
-
 const StatusPedidoWrapper = styled.div`
 font-family: "Roboto Condensed";
-margin-top: 6px;
 padding: 2px;
 font-family: "Bebas Neue", sans-serif !important;
-.div-data{
-    display: inline;
-}
 .card{
-    border-color:transparent;
     transition:all 0.3s linear;
 }
 .div-title{
@@ -75,31 +50,22 @@ font-family: "Bebas Neue", sans-serif !important;
     padding: 4px;
     background: var(--lightBlue2);
 }
-.enderecoeditar-btn{
-    text-transform: capitalized;
-    display: inline;
-    margin: 2px 2px;
-    padding:0.2rem 0.4rem;
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-    border:none;
-    font-size: 1.2rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
+.edit-btn{
+    border-radius: 10px;
+    color: #FFFFFF;
+    background-color: #3D94F6;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 0.6rem;
+    margin: 0.2rem 0.5rem 0.2rem 0;
+    border: solid #337FED 0;
+    cursor: pointer;
+    text-align: center; 
 }
-.enderecoexcluir-btn{
-    text-transform: capitalized;
-    display: inline;
-    margin: 2px 2px;
-    padding:0.2rem 0.4rem;
-    background: red;
-    color: var(--mainWhite);
-    border:none;
-    font-size: 1.2rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
-}
-.buttons-endereco{
-    margin: 6px 6px;
+.edit-btn:hover{
+    background: #1E62D0;
+    border: solid #337FED 0;
+    border-radius: 10px;
+    text-decoration: none;
 }
 `;

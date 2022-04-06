@@ -4,11 +4,12 @@ import styled from "styled-components";
 
 export default function Endereco(item) {
     const { idEndereco, rua, numero, bairro, cidade, cep, complemento } = item.item;
-    const { handleEnderecoEditar, handleDeleteEndereco } = item.value;
+    const { handleEnderecoEditar, handleDeleteEndereco, openModalMensagem, openModalExcluir } = item.value;
+
     return (
         <EnderecoWrapper className="col-6">
-            <div className="card">
-                <div className="pt-3 container">
+            <div className="pt-3 card">
+                <div className="container">
                     <div className="row">
                         <span>
                             {rua}, n. {numero}
@@ -23,7 +24,7 @@ export default function Endereco(item) {
                             {cep.replace(/\D/g, "")}
                         </span>
                         <span>
-                            {cidade.nome} - {cidade.estado.nome}
+                            {cidade.nome} - {cidade.estado.uf}
                         </span>
                     </div>
                     <div className="row">
@@ -35,7 +36,7 @@ export default function Endereco(item) {
                                     </span>
                                 </button>
                             </Link>
-                            <button className="enderecoexcluir-btn" onClick={() => { handleDeleteEndereco(idEndereco); }}>
+                            <button className="enderecoexcluir-btn" onClick={() => { openModalExcluir(idEndereco, "endereco"); }}>
                                 <span className="m-2">
                                     <i className="fa fa-trash" />
                                 </span>
@@ -71,8 +72,15 @@ padding: 2px;
     color: var(--mainWhite);
     border:none;
     font-size: 1.2rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
+    border-radius: 10px;
+}
+.enderecoeditar-btn:hover{
+    background: #006600;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 .enderecoexcluir-btn{
     text-transform: capitalized;
@@ -83,8 +91,15 @@ padding: 2px;
     color: var(--mainWhite);
     border:none;
     font-size: 1.2rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
+    border-radius: 10px;
+}
+.enderecoexcluir-btn:hover{
+    background: #BD0202;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 .buttons-endereco{
     margin: 6px 6px;

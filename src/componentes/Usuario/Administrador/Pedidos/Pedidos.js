@@ -7,6 +7,7 @@ import { ProdutoConsumer } from "../../../../Contexto";
 import Title from "../../../Title";
 import ListaPedidos from "./ListaPedidos";
 import { CSVLink } from "react-csv";
+import BotaoVoltar from "../../../ButtonVoltar";
 
 export default class Pedidos extends Component {
     render() {
@@ -37,10 +38,26 @@ export default class Pedidos extends Component {
                         const send = (event) => {
                             event.preventDefault();
                             var select = document.querySelector("select[id=selectFiltro]");
-                            console.log(select.value);
+                            var dataInicial = document.querySelector("input[id=PeriodoInicio]");
+                            var dataFinal = document.querySelector("input[id=PeriodoFim]");
 
-                            if (select.value != null || select.value != "" || typeof select.value != "undefined") {
-                                listarPedidosFiltro(selectFiltro.value);
+                            if (filtroPedidosAdmin == "periodo")
+                                var data = {
+                                    idFiltro: 0,
+                                    dataInicial: dataInicial.value,
+                                    dataFinal: dataFinal.value
+                                };
+                            else
+                                var data = {
+                                    idFiltro: select.value,
+                                    dataInicial: "",
+                                    dataFinal: ""
+                                };
+
+                            if (data.idFiltro != null || data.idFiltro != "" || typeof data.idFiltro != "undefined" ||
+                                data.dataInicial != null || data.dataInicial != "" || typeof data.dataInicial != "undefined" ||
+                                data.dataFinal != null || data.dataFinal != "" || typeof data.dataFinal != "undefined") {
+                                listarPedidosFiltro(data);
                             }
                             else
                                 console.log("erro");
@@ -51,12 +68,7 @@ export default class Pedidos extends Component {
                                 <div className="col-6 ml-auto">
                                     <ButtonWrapper>
                                         <Link to="/user" style={{ textDecoration: "none" }}>
-                                            <button className="btn-voltar">
-                                                <span className="m-2">
-                                                    <i className="fas fa-arrow-left" />
-                                                </span>
-                                                Voltar
-                                            </button>
+                                            <BotaoVoltar />
                                         </Link>
                                     </ButtonWrapper>
                                 </div>
@@ -77,11 +89,30 @@ export default class Pedidos extends Component {
                                                 <input onInput={() => { value.setFiltroListagem("rdFormaPagamento"); }} id="rdFormaPagamento" style={{ marginRight: "0.5rem " }} type="radio" />
                                                 <label htmlFor="rdFormaPagamento">Forma de pagamento</label>
                                             </div>
+                                            <div>
+                                                <input onInput={() => { value.setFiltroListagem("rdPeriodo"); }} id="rdPeriodo" style={{ marginRight: "0.5rem " }} type="radio" />
+                                                <label htmlFor="rdPeriodo">Período</label>
+                                            </div>
                                             <form onSubmit={send} style={{ marginTop: "0.7rem" }}>
-                                                <select className="form-control" defaultValue="" id="selectFiltro" name="selectFiltro">
-                                                    <option disabled hidden>--Selecione--</option>
-                                                    {filtroSelecionado()}
-                                                </select>
+                                                {(filtroPedidosAdmin != "periodo") ?
+                                                    <select className="form-control" defaultValue="" id="selectFiltro" name="selectFiltro">
+                                                        <option disabled hidden>--Selecione--</option>
+                                                        {filtroSelecionado()}
+                                                    </select>
+                                                    :
+                                                    <div className="my-3">
+                                                        <div className="form-group">
+                                                            <label htmlFor="PeriodoInicio">Período inicial</label>
+                                                            <input className="form-control" id="PeriodoInicio" style={{ marginRight: "0.5rem " }} type="date" />
+                                                        </div>
+                                                        <div className="form-group mb-2">
+                                                            <label htmlFor="PeriodoFim">Período fim</label>
+                                                            <input className="form-control" id="PeriodoFim" style={{ marginRight: "0.5rem " }} type="date" />
+                                                        </div>
+                                                    </div>
+                                                }
+
+
                                                 <ButtonWrapper>
                                                     <button type="submit" className="btn-submit">
                                                         Confirmar
@@ -115,47 +146,28 @@ font-family: "Roboto Condensed";
 `;
 
 const ButtonWrapper = styled.div`
-.btn-voltar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+.btn-submit {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    background-color: #3D94F6;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 1rem 0.5rem 0.2rem 0;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
-}
-.btn-voltar:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-voltar:focus{
-    outline: none;
-}
-.btn-submit{
-    width: 9rem;
-    text-transform: capitalized;
-    background: var(--mainWhite);
-    font-size: 1.2rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    cursor: pointer;
-    margin: 0.8rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
-}
-.btn-submit:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-submit:focus{
-    outline: none;
-}
+    text-align: center;
+ } 
+ .btn-submit:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;

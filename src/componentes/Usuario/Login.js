@@ -50,7 +50,7 @@ export default function Login() {
                                     <p>Inscrever-se</p>
                                 </Link>
                             </div>
-                            <button type="submit" className="btn-submit">Entrar</button>
+                            <button type="submit" className="BUTTON_TRS">Entrar</button>
                         </form>
                     </LoginWrapper>
                 );
@@ -70,26 +70,30 @@ padding: 50px 50px;
 h3 {
     color: var(--mainBlue);
 }
-.btn-submit{
-    width: 7rem;
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.2rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    cursor: pointer;
+
+.BUTTON_TRS {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
     margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainBlue);
-    color: var(--mainBlue);
-}
-.btn-submit:hover{
-    background: var(--mainBlue);
-    color: var(--mainWhite);
-}
-.btn-submit:focus{
-    outline: none;
-}
+    background-color: #3D94F6;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+ }
+ 
+ .BUTTON_TRS:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;

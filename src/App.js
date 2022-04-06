@@ -30,6 +30,12 @@ import ModalMensagem from './componentes/ModalMensagem';
 import ProdutosBusca from './componentes/Produtos/ProdutosBusca';
 import Footer from './componentes/Footer';
 import SelecionarEnderecoPedido from './componentes/Endereco/SelecionarEnderecoPedido';
+import CadastrarProduto from './componentes/Usuario/Administrador/Produtos/CadastrarProduto';
+import { AdminRouter } from './AdminRouter';
+import Produtos from './componentes/Usuario/Administrador/Produtos/Produtos';
+import DetalhesProdutoAdmin from './componentes/Usuario/Administrador/Produtos/DetalhesProdutoAdmin';
+import EditarProduto from './componentes/Usuario/Administrador/Produtos/EditarProduto';
+import ModalExcluir from './componentes/ModalExcluir';
 
 class App extends Component {
   render() {
@@ -44,15 +50,21 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={CadastroUsuario} />
           <Route path="/search-result" component={ProdutosBusca} />
+
+          <AdminRouter path="/admin-pedidos" component={Pedidos} />
+          <AdminRouter path="/admin-fichasproducao" component={FichasProducao} />
+          <AdminRouter path="/order-detail-admin" component={DetalhesPedidoAdmin} />
+          <AdminRouter path="/new-fichaproducao" component={CadastroFichaProducao} />
+          <AdminRouter path="/details-fichaproducao" component={DetalhesFichaProducao} />
+          <AdminRouter path="/edit-fichaproducao" component={EditarFichaProducao} />
+          <AdminRouter path="/new-produto" component={CadastrarProduto} />
+          <AdminRouter path="/admin-produtos" component={Produtos} />
+          <AdminRouter path="/detail-produto-admin" component={DetalhesProdutoAdmin} />
+          <AdminRouter path="/edit-produto-admin" component={EditarProduto} />
+
           <PrivateRouter path="/order-summary" component={ResumoPedido} />
           <PrivateRouter path="/select-address" component={SelecionarEnderecoPedido} />
           <PrivateRouter path="/user" component={PerfilUsuario} />
-          <PrivateRouter path="/admin-pedidos" component={Pedidos} />
-          <PrivateRouter path="/admin-fichasproducao" component={FichasProducao} />
-          <PrivateRouter path="/order-detail-admin" component={DetalhesPedidoAdmin} />
-          <PrivateRouter path="/new-fichaproducao" component={CadastroFichaProducao} />
-          <PrivateRouter path="/details-fichaproducao" component={DetalhesFichaProducao} />
-          <PrivateRouter path="/edit-fichaproducao" component={EditarFichaProducao} />
           <PrivateRouter path="/new-endereco" component={CadastroEndereco} />
           <PrivateRouter path="/edit-address" component={EditarEndereco} />
           <PrivateRouter path="/order-detail" component={DetalhesPedido} />
@@ -61,6 +73,7 @@ class App extends Component {
         <Modal />
         <ModalMensagem />
         <ModalEditar />
+        <ModalExcluir />
         <Spinner />
         <Footer />
       </React.Fragment>

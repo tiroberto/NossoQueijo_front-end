@@ -6,6 +6,7 @@ import { useContext } from "react/cjs/react.development";
 import { ProdutoConsumer } from "../../../../Contexto";
 import Title from "../../../Title";
 import ListaFichaProducao from "./ListaFichaProducao";
+import BotaoVoltar from "../../../ButtonVoltar";
 
 export default class FichasProducao extends Component {
     render() {
@@ -52,12 +53,7 @@ export default class FichasProducao extends Component {
                             <div className="col-6 ml-auto">
                                 <ButtonWrapper>
                                     <Link to="/user" style={{ textDecoration: "none" }}>
-                                        <button className="btn-voltar">
-                                            <span className="m-2">
-                                                <i className="fas fa-arrow-left" />
-                                            </span>
-                                            Voltar
-                                        </button>
+                                        <BotaoVoltar />
                                     </Link>
                                 </ButtonWrapper>
                             </div>
@@ -75,48 +71,50 @@ export default class FichasProducao extends Component {
                                                 </button>
                                             </Link>
                                         </ButtonWrapper>
-                                        <p>Selecione tipo de filtro para os pedidos.</p>
-                                        <div>
-                                            <input onInput={() => { value.setFiltroListagemFichaProducao("rdUsuario"); }} id="rdUsuario" style={{ marginRight: "0.5rem " }} type="radio" />
-                                            <label htmlFor="rdUsuario">Usuário</label>
-                                        </div>
-                                        <div>
-                                            <input onInput={() => { value.setFiltroListagemFichaProducao("rdPeriodo"); }} id="rdPeriodo" style={{ marginRight: "0.5rem " }} type="radio" />
-                                            <label htmlFor="rdPeriodo">Período</label>
-                                        </div>
-                                        <form onSubmit={send}>
-                                            {(filtroFichaProducao == "usuario") ?
-                                                <div className="form-group my-3">
-                                                    <label htmlFor="selectUsuario">Usuário</label>
-                                                    <select className="form-control" defaultValue="" id="selectUsuario" name="selectUsuario">
-                                                        {usuariosAdmin()}
-                                                    </select>
-                                                </div>
-                                                : null
-                                            }
-                                            {(filtroFichaProducao == "periodo") ?
-                                                <div className="my-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="PeriodoInicio">Período inicial</label>
-                                                        <input className="form-control" id="PeriodoInicio" style={{ marginRight: "0.5rem " }} type="date" />
+                                        <div className="card">
+                                            <p>Selecione tipo de filtro para os pedidos.</p>
+                                            <div>
+                                                <input onInput={() => { value.setFiltroListagemFichaProducao("rdUsuario"); }} id="rdUsuario" style={{ marginRight: "0.5rem " }} type="radio" />
+                                                <label htmlFor="rdUsuario">Usuário</label>
+                                            </div>
+                                            <div>
+                                                <input onInput={() => { value.setFiltroListagemFichaProducao("rdPeriodo"); }} id="rdPeriodo" style={{ marginRight: "0.5rem " }} type="radio" />
+                                                <label htmlFor="rdPeriodo">Período</label>
+                                            </div>
+                                            <form onSubmit={send}>
+                                                {(filtroFichaProducao == "usuario") ?
+                                                    <div className="form-group my-3">
+                                                        <label htmlFor="selectUsuario">Usuário</label>
+                                                        <select className="form-control" defaultValue="" id="selectUsuario" name="selectUsuario">
+                                                            {usuariosAdmin()}
+                                                        </select>
                                                     </div>
-                                                    <div className="form-group mb-2">
-                                                        <label htmlFor="PeriodoFim">Período fim</label>
-                                                        <input className="form-control" id="PeriodoFim" style={{ marginRight: "0.5rem " }} type="date" />
+                                                    : null
+                                                }
+                                                {(filtroFichaProducao == "periodo") ?
+                                                    <div className="my-3">
+                                                        <div className="form-group">
+                                                            <label htmlFor="PeriodoInicio">Período inicial</label>
+                                                            <input className="form-control" id="PeriodoInicio" style={{ marginRight: "0.5rem " }} type="date" />
+                                                        </div>
+                                                        <div className="form-group mb-2">
+                                                            <label htmlFor="PeriodoFim">Período fim</label>
+                                                            <input className="form-control" id="PeriodoFim" style={{ marginRight: "0.5rem " }} type="date" />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                : null
-                                            }
-                                            <ButtonWrapper>
-                                                <button type="submit" className="btn-submit">
-                                                    Confirmar
-                                                </button>
-                                            </ButtonWrapper>
-                                        </form>
+                                                    : null
+                                                }
+                                                <ButtonWrapper>
+                                                    <button type="submit" className="btn-submit">
+                                                        Confirmar
+                                                    </button>
+                                                </ButtonWrapper>
+                                            </form>
+                                        </div>
                                     </div>
                                     {(fichasProducaoListadosFiltro.length > 0) ?
                                         <ListaFichaProducao value={value} />
-                                        : null
+                                        : "Vazio"
                                     }
                                 </FichaProducaoWrapper>
                             </div>
@@ -140,67 +138,51 @@ font-family: "Roboto Condensed";
 
 const ButtonWrapper = styled.div`
 .btn-submit{
-    width: 9rem;
-    text-transform: capitalized;
-    background: var(--mainWhite);
-    font-size: 1.2rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 1rem 0.5rem 0.5rem 0;
+    background-color: #3D94F6;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    margin: 0.8rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
+    text-align: center;
 }
-.btn-submit:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-submit:focus{
-    outline: none;
-}
-.btn-voltar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    cursor: pointer;
-    margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
-}
-.btn-voltar:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-voltar:focus{
-    outline: none;
-}
+.btn-submit:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 .btn-novo{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.2rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 0.2rem 0.5rem 2rem 0;
+    background-color: #3D94F6;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    margin: 0.8rem 0.5rem 3rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainGreen);
-    color: var(--mainGreen);
+    text-align: center;
 }
-.btn-novo:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-.btn-novo:focus{
-    outline: none;
-}
+.btn-novo:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;

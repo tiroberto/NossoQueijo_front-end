@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Pedido(pedido) {
     const { idPedido, formaPagamento, status, valorFrete, pedidoProdutos } = pedido.pedido;
-    const { handleDetalhePedidoAdmin } = pedido.value;
+    const { handleDetalhePedidoAdmin, openModalExcluir } = pedido.value;
 
     function calcularValorTotalPedido() {
         var total = 0;
@@ -37,15 +37,23 @@ export default function Pedido(pedido) {
                             <span>Produtos: {calcularTotalProdutosPedido()}</span>
                         </div>
                         <div className="col-3 detail-button-align-center">
-                            <div onClick={() => { handleDetalhePedidoAdmin(idPedido) }}>
+                            <div className="d-inline">
                                 <Link to="/order-detail-admin">
-                                    <button className="detalhes-btn">
+                                    <button className="detalhes-btn" onClick={() => { handleDetalhePedidoAdmin(idPedido) }}>
                                         <span className="m-2">
                                             <i className="fas fa-plus" />
                                         </span>
                                         Detalhes
                                     </button>
                                 </Link>
+                            </div>
+                            <div className="d-inline">
+                                <button className="excluir-btn" onClick={() => { openModalExcluir(idPedido, "pedidoAdmin"); }}>
+                                    <span className="m-2">
+                                        <i className="fas fa-trash" />
+                                    </span>
+                                    Excluir
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -79,11 +87,36 @@ padding: 2px;
     text-transform: capitalized;
     margin: 2px 2px;
     padding: 0 0.8rem 0 0.8rem;
-    background: var(--lightBlue);
+    background-color: #3D94F6;
     color: var(--mainWhite);
     border:none;
     font-size: 1.0rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
+    border-radius: 10px;
+}
+.detalhes-btn:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.excluir-btn{
+    text-transform: capitalized;
+    margin: 2px 2px;
+    padding: 0 0.8rem 0 0.8rem;
+    background-color: var(--mainRed);
+    color: var(--mainWhite);
+    border:none;
+    font-size: 1.0rem;
+    border-radius: 10px;
+}
+.excluir-btn:hover {
+    background: #BD0202;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 `;

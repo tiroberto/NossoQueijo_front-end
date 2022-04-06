@@ -9,7 +9,7 @@ export default class Produto extends Component {
         const { idProduto, nome, qntdEstoque, preco, peso, imagem, adicionadoAoCarrinho } = this.props.produto;
         var precoFormatado = preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",");
         return (
-            <ProdutoWrapper className="col-9 mx-auto col-md-6 col-lg-3 my-3">
+            <ProdutoWrapper className="col-9 col-md-6 col-lg-3 my-3">
                 <div className="card">
                     <ProdutoConsumer>
                         {value => (
@@ -33,7 +33,7 @@ export default class Produto extends Component {
                         <p className="align-self-center mb-0">
                             {nome}
                         </p>
-                        <h3 className="text-blue mb-0">
+                        <h3 className="mb-0">
                             <span className="mr-1">
                                 {precoFormatado}
                             </span>
@@ -65,18 +65,15 @@ const ProdutoWrapper = styled.div`
 }
 .card-footer{
     border-radius: 0 0 1rem 1rem;
-    //background:rgba(210,250,260);
-    background: var(--lightBlue2);
+    //background: var(--lightBlue2);
+    background: white;
     border-color:transparent;
-    transition:all 1s linear;
+    transition:all 0.2s linear;
 }
 &:hover{
     .card{
         border:0.05rem solid rgba(0,0,0,0.2);
         box-shadow:px 2px 5px 0px rgba(0,0,0,0.2);
-    }
-    .card-footer{
-        background:rgba(150,247,260);        
     }
 }
 .img-container{
@@ -100,7 +97,7 @@ const ProdutoWrapper = styled.div`
     font-size:1.4rem;
     border-radius:0.3rem 0 0 0;
     //transform:translate(100%, 100%);
-    transition: all 0.5s linear;
+    //transition: all 0.5s linear;
 }
 .img-container:hover .cart-btn{
     transform:translate(0, 0);

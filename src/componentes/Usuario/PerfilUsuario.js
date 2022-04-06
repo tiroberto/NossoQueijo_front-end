@@ -10,6 +10,7 @@ import ProdutoContexto from "../../Contexto";
 import Title from "../Title";
 import ListaPedidos from "../Pedido/ListaPedidos";
 import Login from "./Login";
+import MenuAdmin from "./MenuAdmin";
 
 
 export default class PerfilUsuario extends Component {
@@ -24,31 +25,7 @@ export default class PerfilUsuario extends Component {
                             <div className="container background-white py-5">
                                 <div className="row">
                                     <div className="col-6">
-                                        {menuAdminShow ?
-                                            <ButtonWrapper>
-                                                <button onClick={() => { value.showMenuAdmin(); }} className="btn-admin dropdown-toggle">
-                                                    <span className="m-2">
-                                                        <i className="fas fa-users-cog"></i>
-                                                    </span>
-                                                    Área administrador
-                                                </button>
-                                                {menuAdmin ?
-                                                    (<div className="div-list">
-                                                        <Link to="/admin-pedidos" style={{ textDecoration: "none" }} className="col-6">
-                                                            <button name="admin-option" onClick={() => { value.showMenuAdmin(); }}>
-                                                                <span>Pedidos</span>
-                                                            </button>
-                                                        </Link>
-                                                        <Link to="/admin-fichasproducao" style={{ textDecoration: "none" }} className="col-6">
-                                                            <button name="admin-option" onClick={() => { value.showMenuAdmin(); }}>
-                                                                <span>Fichas de produção</span>
-                                                            </button>
-                                                        </Link>
-                                                    </div>)
-                                                    : null}
-                                            </ButtonWrapper>
-                                            : null
-                                        }
+                                        <MenuAdmin />
                                     </div>
                                     <div className="col-6">
                                         <Link to="/" style={{ textDecoration: "none", textAlign: "right" }}>
@@ -86,28 +63,6 @@ export default class PerfilUsuario extends Component {
 }
 
 const ButtonWrapper = styled.div`
-button[name=admin-option]{
-    text-transform: capitalized;
-    text-align: center;
-    font-size: 1rem;
-    width: 8rem;
-    padding: 0.2rem 0.5rem 0.2rem 0.5rem;
-    margin: 0.3rem 0.1rem 0.3rem 0.1rem;
-    text-align: left;
-    border: none;
-    border-radius: 0.5rem;
-    transition: all 0.5s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-button[name=admin-option]:hover{    
-    background: transparent;
-    border: 0.05rem solid;
-    color: var(--lightBlue);
-}
 .div-list{
     border: 0.05rem solid;
     border-radius: 0.5rem;
@@ -118,45 +73,76 @@ button[name=admin-option]:hover{
     display: inline;
 }
 .btn-sair{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 0.6rem;
     margin: 0.2rem 0.5rem 0.2rem 0;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainRed);
-    color: var(--mainRed);
+    text-align: center;
+    background-color: var(--mainRed);
+    color: var(--mainWhite);
 }
 .btn-sair:hover{
-    background: var(--mainRed);
-    color: var(--mainWhite);
+    background: #BD0202;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
-.btn-sair:focus{
-    outline: none;
-}
-.btn-admin{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+.btn-admin {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 0.6rem;
     margin: 0.2rem 0.5rem 0.2rem 0;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #3D94F6;
+ }
+ 
+ .btn-admin:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
+ button[name=admin-option]{
+    text-transform: capitalized;
+    text-align: center;
+    font-size: 1rem;
+    width: 8rem;
+    padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+    margin: 0.3rem 0.1rem 0.3rem 0.1rem;
+    text-align: left;
+    border: none;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    background-color: #3D94F6;
 }
-.btn-admin:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-admin:focus{
-    outline: none;
+button[name=admin-option]:hover{    
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 `;

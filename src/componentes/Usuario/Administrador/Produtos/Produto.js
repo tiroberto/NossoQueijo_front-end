@@ -2,64 +2,75 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export default function Pedido(item) {
-    const { idPedido, formaPagamento, status, valorFrete, pedidoProdutos } = item.item;
-
-    const valorTotal = () => {
-        var valorTotal = 0;
-        pedidoProdutos.forEach(item => {
-            valorTotal += item.quantidade * item.produto.preco;
-        });
-        return valorTotal;
-    }
-
-    const totalProdutos = () => {
-        var total = 0;
-        pedidoProdutos.forEach(item => {
-            total += item.quantidade;
-        });
-        return total;
-    }
+export default function Produto(produto) {
+    const { idProduto, nome, qntdEstoque } = produto.produto;
+    const { handleDetalheProdutoAdmin, openModalExcluir } = produto.value;
 
     return (
-        <PedidoWrapper>
+        <ProdutoWrapper>
             <div className="card">
                 <div className="container">
                     <div className="row align-items-center  text-center">
                         <div className="col-3">
                             <div className="m-1 protocol-order">
-                                <span><strong>Pedido: #{idPedido}</strong></span>
+                                <span><strong>Id: #{idProduto}</strong></span>
                             </div>
                         </div>
                         <div className="col-3">
-                            <span>Valor total: {valorTotal()}</span>
+                            <span>{nome}</span>
                         </div>
                         <div className="col-3">
-                            <span>Produtos: {totalProdutos()}</span>
+                            <span>{qntdEstoque}</span>
                         </div>
                         <div className="col-3 detail-button-align-center">
-                            <div onClick={() => item.value.handleDetalhePedido(idPedido)}>
-                                <Link to="/order-detail">
-                                    <button className="detalhes-btn">
+                            <div className="d-inline">
+                                <Link to="/detail-produto-admin">
+                                    <button className="detalhes-btn" onClick={() => { handleDetalheProdutoAdmin(idProduto) }}>
                                         <span className="m-2">
                                             <i className="fas fa-plus" />
                                         </span>
-                                            Detalhes
+                                        Detalhes
                                     </button>
                                 </Link>
+                            </div>
+                            <div className="d-inline">
+                                <button className="excluir-btn" onClick={() => { openModalExcluir(idProduto, "produtoAdmin"); }}>
+                                    <span className="m-2">
+                                        <i className="fas fa-trash" />
+                                    </span>
+                                    Excluir
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </PedidoWrapper >
+        </ProdutoWrapper >
     );
 }
 
-const PedidoWrapper = styled.div`
+const ProdutoWrapper = styled.div`
 font-family: "Roboto Condensed";
 margin-top: 6px;
 padding: 2px;
+.excluir-btn{
+    text-transform: capitalized;
+    margin: 2px 2px;
+    padding: 0 0.8rem 0 0.8rem;
+    background-color: var(--mainRed);
+    color: var(--mainWhite);
+    border:none;
+    font-size: 1.0rem;
+    border-radius: 10px;
+}
+.excluir-btn:hover {
+    background: #BD0202;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+}
 .protocol-order{
     font-size: 1rem;
     margin: 0 12px 0 12px;
@@ -72,9 +83,6 @@ padding: 2px;
     background: var(--honeyDew);
     border-style:solid;
     transition:all 0.3s linear;
-}
-.detail-button-align-center{
-    text-align: center;
 }
 .detalhes-btn{
     text-transform: capitalized;

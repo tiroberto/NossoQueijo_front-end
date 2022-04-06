@@ -1,6 +1,6 @@
 :root{
   --mainWhite:#f3f3f3;
-  --mainBlue:#2a2a72;
+  --mainBlue:#4747BF;
   --lightBlue:#809ffd;
   --mainDark:#23252b;
   --mainOrange:#ffa408;
@@ -38,7 +38,6 @@ html, body{
 }
 body{
   font-family: "Bebas Neue", sans-serif !important;
-  background-image: url("https://i.imgur.com/vo3XiR7.png") !important;  
   color: var(--mainDark) !important;
   display: flex;
   position: relative;

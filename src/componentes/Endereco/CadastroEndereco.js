@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ProdutoConsumer } from "../../Contexto";
 import Title from "../Title";
+import BotaoVoltar from "../ButtonVoltar";
 
 export default class CadastroEndereco extends Component {
     render() {
@@ -55,12 +56,7 @@ export default class CadastroEndereco extends Component {
                                 <div className="col-6 ml-auto">
                                     <ButtonWrapper>
                                         <Link to="/user" style={{ textDecoration: "none" }}>
-                                            <button className="btn-voltar">
-                                                <span className="m-2">
-                                                    <i className="fas fa-arrow-left" />
-                                                </span>
-                                                Voltar
-                                            </button>
+                                            <BotaoVoltar />
                                         </Link>
                                     </ButtonWrapper>
                                 </div>
@@ -153,33 +149,40 @@ const ButtonWrapper = styled.div`
 .btn-voltar:focus{
     outline: none;
 }
-.btn-salvar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.2rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+.btn-salvar {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 0.2rem 0.5rem 0.2rem 0;
+    background-color: #3D94F6;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    margin: 0.8rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainGreen);
-    color: var(--mainGreen);
-}
-.btn-salvar:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-.btn-salvar:focus{
-    outline: none;
-}
+    text-align: center;
+ }
+ 
+ .btn-salvar:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;
 
 const CadastroEnderecoWrapper = styled.div`
 margin: 3rem 20rem;
 padding: 50px 50px;
 input {
+    font-family: "Roboto Condensed";
+}
+select {
     font-family: "Roboto Condensed";
 }
 h3 {

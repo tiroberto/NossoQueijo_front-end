@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ProdutoConsumer } from "../../../../Contexto";
+import BotaoVoltar from "../../../ButtonVoltar";
 import Title from "../../../Title";
 
 export default class CadastroFichaProducao extends Component {
@@ -10,6 +11,12 @@ export default class CadastroFichaProducao extends Component {
             <ProdutoConsumer>
                 {value => {
                     const { cadastroFichaProducaoInputs, usuariosList, produtos } = value;
+
+                    var usuariosPermitidos = [];
+                    for (var i = 0; i < usuariosList.length; i++) {
+                        if (usuariosList[i].tipoUsuario.idTipoUsuario == 1)
+                            usuariosPermitidos.push(usuariosList[i]);
+                    }
 
                     const send = (event) => {
                         event.preventDefault();
@@ -41,7 +48,7 @@ export default class CadastroFichaProducao extends Component {
                             value.handleSubmitCadastroFichaProducao(fichaProducaoSalvar);
                         }
                         else
-                            console.log("erro");
+                            openModalMensagem("Alguns campos não foram preenchidos!", "/new-fichaproducao");
                     }
                     return (
                         <>
@@ -49,12 +56,7 @@ export default class CadastroFichaProducao extends Component {
                                 <div className="col-6 ml-auto">
                                     <ButtonWrapper>
                                         <Link to="/admin-fichasproducao" style={{ textDecoration: "none" }}>
-                                            <button className="btn-voltar">
-                                                <span className="m-2">
-                                                    <i className="fas fa-arrow-left" />
-                                                </span>
-                                                Voltar
-                                            </button>
+                                            <BotaoVoltar />
                                         </Link>
                                     </ButtonWrapper>
                                 </div>
@@ -72,7 +74,7 @@ export default class CadastroFichaProducao extends Component {
                                                     <label htmlFor="selectUsuario">Usuario</label>
                                                     <select onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="selectUsuario" name="selectUsuario">
                                                         <option value="" selected disabled hidden>--Selecione--</option>
-                                                        {usuariosList.map(usuario => {
+                                                        {usuariosPermitidos.map(usuario => {
                                                             return <option key={usuario.idUsuario} value={usuario.idUsuario}>{usuario.nome}</option>
                                                         })}
                                                     </select>
@@ -132,48 +134,30 @@ export default class CadastroFichaProducao extends Component {
 }
 
 const ButtonWrapper = styled.div`
-.btn-voltar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    cursor: pointer;
-    margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
-}
-.btn-voltar:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-voltar:focus{
-    outline: none;
-}
 .btn-salvar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.2rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 0.2rem 0.5rem 2rem 0;
+    background-color: #3D94F6;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    margin: 0.8rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainGreen);
-    color: var(--mainGreen);
+    text-align: center;
 }
-.btn-salvar:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-.btn-salvar:focus{
-    outline: none;
-}
+.btn-salvar:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;
 
 const CadastroFichaProducaoWrapper = styled.div`

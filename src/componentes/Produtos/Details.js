@@ -3,6 +3,7 @@ import { ProdutoConsumer } from "../../Contexto";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { ButtonContainer } from "../Button";
 import styled from "styled-components";
+import BotaoVoltar from "../ButtonVoltar"
 
 export default class Details extends Component {
     render() {
@@ -14,12 +15,7 @@ export default class Details extends Component {
                         <DetailsWrapper className="container py-5 background-white">
                             <div className="container">
                                 <Link to="/" className="col-6 ml-auto" style={{ textDecoration: "none" }}>
-                                    <button className="btn-voltar">
-                                        <span className="m-2">
-                                            <i className="fas fa-arrow-left" />
-                                        </span>
-                                        Voltar
-                                    </button>
+                                    <BotaoVoltar />
                                 </Link>
                             </div>
                             <div className="row mt-5">
@@ -43,7 +39,7 @@ export default class Details extends Component {
                                                 value.addToCarrinho(value.detalhesProduto.idProduto);
                                                 value.openModal(value.detalhesProduto.idProduto);
                                             }}>
-                                            {value.detalhesProduto.adicionadoAoCarrinho ? "No carrinho" : "Adicionar ao carrinho"}
+                                            {value.detalhesProduto.adicionadoAoCarrinho ? "No carrinho" : <div><span className="m-2"><i className="fas fa-cart-plus" /></span>Adicionar ao carrinho</div>}
                                         </ButtonContainer>
                                     </div>
                                 </div>

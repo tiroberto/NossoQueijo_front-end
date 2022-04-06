@@ -3,6 +3,7 @@ import { ProdutoConsumer } from "../../Contexto";
 import styled from "styled-components";
 import Title from "../Title";
 import { Link } from "react-router-dom";
+import BotaoVoltar from "../ButtonVoltar";
 
 export default class EditarEndereco extends Component {
     render() {
@@ -44,159 +45,98 @@ export default class EditarEndereco extends Component {
 
                     return (
                         <EditarEnderecoWrapper className="py-5 container background-white">
-                            <div className="container">
+                            <div className="row">
                                 <Link to="/user" className="col-6 ml-auto" style={{ textDecoration: "none" }}>
-                                    <button className="btn-voltar">
-                                        <span className="m-2">
-                                            <i className="fas fa-arrow-left" />
-                                        </span>
-                                        Voltar
-                                    </button>
+                                    <BotaoVoltar />
                                 </Link>
                             </div>
                             <Title name="EDITAR " title="ENDEREÇO" />
-                            <div className="container card">
+                            <div className="row card mx-5">
                                 <div className="row justify-content-center">
-                                    <div className="col-2"></div>
-                                    <div className="col-8 my-5">
+                                    <div className="col-8 my-3 card">
                                         <h5 className="text-center div-title">Atual</h5>
                                         <div className="container px-5">
                                             <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    Logradouro:
+                                                <div className="col-6 d-flex align-items-end flex-column">
+                                                    <span>Logradouro:</span>
+                                                    <span>Número:</span>
+                                                    <span>Bairro:</span>
+                                                    <span>Complemento:</span>
+                                                    <span>CEP:</span>
+                                                    <span>Cidade:</span>
+                                                    <span>Estado:</span>
                                                 </div>
-                                                <div className="col-4 div-data">
-                                                    {rua}
+                                                <div className="col-6 d-flex align-items-start flex-column div-data">
+                                                    <span>{rua}</span>
+                                                    <span>{numero}</span>
+                                                    <span>{bairro}</span>
+                                                    <span>{complemento}</span>
+                                                    <span>{cep}</span>
+                                                    <span>{cidade.nome}</span>
+                                                    <span>{cidade.estado.nome}</span>
                                                 </div>
-                                                <div className="col-2"></div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    Número:
-                                                </div>
-                                                <div className="col-4 div-data">
-                                                    {numero}
-                                                </div>
-                                                <div className="col-2"></div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    Bairro:
-                                                </div>
-                                                <div className="col-4 div-data">
-                                                    {bairro}
-                                                </div>
-                                                <div className="col-2"></div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    Complemento:
-                                                </div>
-                                                <div className="col-4 div-data">
-                                                    {complemento}
-                                                </div>
-                                                <div className="col-2"></div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    CEP:
-                                                </div>
-                                                <div className="col-4 div-data">
-                                                    {cep}
-                                                </div>
-                                                <div className="col-2"></div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    Cidade:
-                                                </div>
-                                                <div className="col-4 div-data">
-                                                    {cidade.nome}
-                                                </div>
-                                                <div className="col-2"></div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-2"></div>
-                                                <div className="col-4">
-                                                    Estado:
-                                                </div>
-                                                <div className="col-4 div-data">
-                                                    {cidade.estado.nome}
-                                                </div>
-                                                <div className="col-2"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-2"></div>
                                 </div>
-                                <div className="row justify-content-center">
-                                    <div className="col-2"></div>
-                                    <div className="col-8">
+                                <div className="row d-flex flex-column align-items-center">
+                                    <div className="col-8 my-3 card">
                                         <h5 className="text-center div-title">Novo</h5>
                                         <div className="px-5">
                                             <form id="form-novo-endereco" onSubmit={send}>
-                                                <div className="div-inputs-form">
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputLogradouro">Logradouro:</label>
-                                                        <input type="text" className="form-control" onChange={() => { value.handleChangeEditarEndereco(); }} id="inputLogradouro" name="inputLogradouro" />
-                                                        <div className="text-danger" hidden={value.editarEnderecoInputs[0].errorNotVisible ? true : false}>{value.editarEnderecoInputs[0].error}</div>
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputNumero">Número:</label>
-                                                        <input type="text" className="form-control" onChange={() => { value.handleChangeEditarEndereco(); }} id="inputNumero" name="inputNumero" />
-                                                        <div className="text-danger" hidden={value.editarEnderecoInputs[1].errorNotVisible ? true : false}>{value.editarEnderecoInputs[1].error}</div>
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputBairro">Bairro:</label>
-                                                        <input type="text" className="form-control" onChange={() => { value.handleChangeEditarEndereco(); }} id="inputBairro" name="inputBairro" />
-                                                        <div className="text-danger" hidden={value.editarEnderecoInputs[2].errorNotVisible ? true : false}>{value.editarEnderecoInputs[2].error}</div>
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputComplemento">Complemento:</label>
-                                                        <input type="text" className="form-control" id="inputComplemento" name="inputComplemento" />
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputCEP">CEP:</label>
-                                                        <input maxLength="9" type="text" className="form-control" onInput={() => { value.mascaraCEP("#####-###"); }} onChange={() => { value.handleChangeEditarEndereco(); }} id="inputCEP" name="inputCEP" />
-                                                        <div className="text-danger" hidden={value.editarEnderecoInputs[3].errorNotVisible ? true : false}>{value.editarEnderecoInputs[3].error}</div>
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputEstado">
-                                                            Estado:
-                                                        </label>
-                                                        <select className="form-control" onChange={() => { value.handleCidadesMostrar(); }} id="selectEstado" name="selectEstado">
-                                                            <option value="" selected disabled hidden>--Selecione--</option>
-                                                            {estados.map(estado => {
-                                                                return <option key={estado.idEstado} value={estado.idEstado}>{estado.nome}</option>
-                                                            })}
-                                                        </select>
-                                                    </div>
-                                                    <div className="form-group mb-3">
-                                                        <label htmlFor="inputCidade">Cidade:</label>
-                                                        <select className="form-control" disabled={value.cidadesMostrarDisabled ? true : false} onChange={() => { value.handleChangeEditarEndereco(); }} id="selectCidade" name="selectCidade">
-                                                            <option value="" selected>--Selecione--</option>
-                                                            {cidadesMostrar.map(cidade => {
-                                                                return <option key={cidade.idCidade} value={cidade.idCidade}>{cidade.nome}</option>
-                                                            })}
-                                                        </select>
-                                                        <div className="text-danger" hidden={value.editarEnderecoInputs[4].errorNotVisible ? true : false}>{value.editarEnderecoInputs[4].error}</div>
-                                                    </div>
-                                                    <div className="row div-row justify-content-end mx-2">
-                                                        <button className="btn-submit">
-                                                            Salvar
-                                                        </button>
-                                                    </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputLogradouro">Logradouro:</label>
+                                                    <input type="text" className="form-control" onChange={() => { value.handleChangeEditarEndereco(); }} id="inputLogradouro" name="inputLogradouro" />
+                                                    <div className="text-danger" hidden={value.editarEnderecoInputs[0].errorNotVisible ? true : false}>{value.editarEnderecoInputs[0].error}</div>
+                                                </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputNumero">Número:</label>
+                                                    <input type="text" className="form-control" onChange={() => { value.handleChangeEditarEndereco(); }} id="inputNumero" name="inputNumero" />
+                                                    <div className="text-danger" hidden={value.editarEnderecoInputs[1].errorNotVisible ? true : false}>{value.editarEnderecoInputs[1].error}</div>
+                                                </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputBairro">Bairro:</label>
+                                                    <input type="text" className="form-control" onChange={() => { value.handleChangeEditarEndereco(); }} id="inputBairro" name="inputBairro" />
+                                                    <div className="text-danger" hidden={value.editarEnderecoInputs[2].errorNotVisible ? true : false}>{value.editarEnderecoInputs[2].error}</div>
+                                                </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputComplemento">Complemento:</label>
+                                                    <input type="text" className="form-control" id="inputComplemento" name="inputComplemento" />
+                                                </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputCEP">CEP:</label>
+                                                    <input maxLength="9" type="text" className="form-control" onInput={() => { value.mascaraCEP("#####-###"); }} onChange={() => { value.handleChangeEditarEndereco(); }} id="inputCEP" name="inputCEP" />
+                                                    <div className="text-danger" hidden={value.editarEnderecoInputs[3].errorNotVisible ? true : false}>{value.editarEnderecoInputs[3].error}</div>
+                                                </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputEstado">
+                                                        Estado:
+                                                    </label>
+                                                    <select className="form-control" onChange={() => { value.handleCidadesMostrar(); }} id="selectEstado" name="selectEstado">
+                                                        <option value="" selected disabled hidden>--Selecione--</option>
+                                                        {estados.map(estado => {
+                                                            return <option key={estado.idEstado} value={estado.idEstado}>{estado.nome}</option>
+                                                        })}
+                                                    </select>
+                                                </div>
+                                                <div className="form-group mb-3">
+                                                    <label htmlFor="inputCidade">Cidade:</label>
+                                                    <select className="form-control" disabled={value.cidadesMostrarDisabled ? true : false} onChange={() => { value.handleChangeEditarEndereco(); }} id="selectCidade" name="selectCidade">
+                                                        <option value="" selected>--Selecione--</option>
+                                                        {cidadesMostrar.map(cidade => {
+                                                            return <option key={cidade.idCidade} value={cidade.idCidade}>{cidade.nome}</option>
+                                                        })}
+                                                    </select>
+                                                    <div className="text-danger" hidden={value.editarEnderecoInputs[4].errorNotVisible ? true : false}>{value.editarEnderecoInputs[4].error}</div>
+                                                </div>
+                                                <div className="mt-3">
+                                                    <button className="btn-submit">
+                                                        Salvar
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <div className="col-2"></div>
                                 </div>
                             </div>
                         </EditarEnderecoWrapper>
@@ -244,47 +184,25 @@ input{
 select{
     width: 100%;
 }
-.btn-voltar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+.btn-submit {
+    border-radius: 10px;
+    color: #FFFFFF;
+    background-color: #3D94F6;
+    font-size: 20px;
+    font-weight: 100;
+    //width: 20%;
+    padding: 0.4rem 1.2rem;
+    margin: 1rem 0.5rem 0.2rem 0;
+    border: solid #337FED 0;
     cursor: pointer;
-    margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--lightBlue);
-    color: var(--lightBlue);
-}
-.btn-voltar:hover{
-    background: var(--lightBlue);
-    color: var(--mainWhite);
-}
-.btn-voltar:focus{
-    outline: none;
-}
-.btn-submit{
-    width: 20%;
-    text-transform: capitalized;
-    background: var(--mainWhite);
-    font-size: 1.4rem;
-    display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0 1rem 0 1rem;
-    cursor: pointer;
-    margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainGreen);
-    color: var(--mainGreen);
-}
-.btn-submit:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-.btn-submit:focus{
-    outline: none;
-}
+    text-align: center;
+ } 
+ .btn-submit:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;

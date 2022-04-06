@@ -8,7 +8,7 @@ export default function EnderecoEntregaPedido(item) {
         <EnderecoEntregaPedidoWrapper>
             <div className="card pb-2">
                 <div className="div-title mt-2"><h5>Endereço de entrega</h5></div>
-                <div className="container mt-4">
+                <div className="container mt-4 div-data">
                     <div className="row aling-items-center">
                         <span>{rua}, n. {numero}</span>
                         <span>{bairro}</span>
@@ -27,6 +27,7 @@ margin-top: 6px;
 padding: 2px;
 font-family: "Bebas Neue", sans-serif !important;
 .div-data{
+    font-family: Roboto Condensed;
     display: inline;
 }
 .card{

@@ -40,7 +40,7 @@ export default class ModalEditar extends Component {
                                 <div className="container">
                                     <div className="row">
                                         <div id="modalEditarStatus" className="col-8 mx-auto col-md-6 col-lg-4 text-center text-capitalizer">
-                                            <h5>Selecione o novo status do pedido #{idPedido}</h5>
+                                            <h5 className="mt-3">Selecione o novo status do pedido #{idPedido}</h5>
                                             <form onSubmit={send}>
                                                 <select id="selectStatus" name="selectStatus">
                                                     <option value="" selected disabled hidden>--Selecione--</option>
@@ -54,6 +54,12 @@ export default class ModalEditar extends Component {
                                                             <i className="fas fa-check"></i>
                                                         </span>
                                                         Confirmar
+                                                    </button>
+                                                    <button className="btn-cancelar" onClick={() => { closeEditarModal(); }}>
+                                                        <span className="m-2">
+                                                            <i className="fas fa-times"></i>
+                                                        </span>
+                                                        Cancelar
                                                     </button>
                                                 </ButtonWrapper>
                                             </form>
@@ -71,26 +77,54 @@ export default class ModalEditar extends Component {
 
 const ButtonWrapper = styled.div`
 text-align: center;
-.btn-confirmar{
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.2rem;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+.btn-confirmar {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    background-color: #3D94F6;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 1rem 0.5rem 1rem 0;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
-    margin: 0.8rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainGreen);
-    color: var(--mainGreen);
-}
-.btn-confirmar:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-.btn-confirmar:focus{
-    outline: none;
-}
+    text-align: center;
+ } 
+ .btn-confirmar:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
+ .btn-cancelar {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    background-color: var(--mainRed);
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0.4rem 1.2rem;
+    margin: 1rem 0.5rem 1rem 0;
+    border: solid #337FED 0;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+ } 
+ .btn-cancelar:hover {
+    background: #BD0202;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;
 
 const ModalContainer = styled.div`
@@ -104,6 +138,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 #modalEditarStatus{
+    border-radius: 1rem;
     background: var(--mainWhite);
 }
 `;

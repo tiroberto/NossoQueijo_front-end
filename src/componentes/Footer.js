@@ -19,34 +19,20 @@ export default function Footer() {
                     </Column>
                     <Column>
                         <Heading>Social Media</Heading>
-                        <FooterLink href="#">
+                        <FooterLink href="https://www.facebook.com/humbertoecrjunior/">
                             <i className="fab fa-facebook-f">
                                 <span style={{ marginLeft: "10px" }}>
                                     Facebook
                                 </span>
                             </i>
                         </FooterLink>
-                        <FooterLink href="#">
+                        <FooterLink href="https://www.instagram.com/humberto_junior99/">
                             <i className="fab fa-instagram">
                                 <span style={{ marginLeft: "10px" }}>
                                     Instagram
                                 </span>
                             </i>
-                        </FooterLink>
-                        <FooterLink href="#">
-                            <i className="fab fa-twitter">
-                                <span style={{ marginLeft: "10px" }}>
-                                    Twitter
-                                </span>
-                            </i>
-                        </FooterLink>
-                        <FooterLink href="#">
-                            <i className="fab fa-youtube">
-                                <span style={{ marginLeft: "10px" }}>
-                                    Youtube
-                                </span>
-                            </i>
-                        </FooterLink>
+                        </FooterLink><br />
                     </Column>
                 </Row>
             </Container>

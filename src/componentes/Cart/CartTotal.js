@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function CartTotal({ value }) {
-    const { carrinho, carrinhoTotal, valorFreteConsultado } = value;
+    const { carrinho, carrinhoTotal, valorFreteConsultado, freteConsultado, resultadoConsultaCorreios } = value;
     const { mascaraCEP, calcularFrete, calculaTotal, limparCarrinho, openModalMensagem } = value;
+
+    const valorFreteConvertidoParaFloat = parseFloat(resultadoConsultaCorreios.Valor);
 
     const send = (event) => {
         event.preventDefault();
@@ -19,39 +21,73 @@ export default function CartTotal({ value }) {
 
     return (
         <React.Fragment>
-            <div className="container-fluid justify-content-end my-5 d-flex">
+            <div className="container my-5">
                 <div className="row">
                     <ButtonWrapper>
-                        <div className="col-4">
-                            <form onSubmit={send}>
-                                <label htmlFor="inputCEP">
-                                    <h4>Calcular frete:</h4>
-                                </label>
-                                <div className="d-flex">
-                                    <input maxLength="9" type="text" id="inputCEP" onChange={() => { mascaraCEP("#####-###"); }} className="form-control" />
-                                    <button type="submit" className="btn-calcularFrete">
-                                        <i className="fas fa-check"></i>
-                                    </button>
+                        <div className="col-2"></div>
+                        <div className="col-8">
+                            <div className="row">
+                                <div className="col-4">
+                                    <form onSubmit={send}>
+                                        <label htmlFor="inputCEP">
+                                            <h4>Calcular frete:</h4>
+                                        </label>
+                                        <div className="d-flex">
+                                            <input maxLength="9" type="text" id="inputCEP" onChange={() => { mascaraCEP("#####-###"); }} className="form-control" />
+                                            <button type="submit" className="btn-calcularFrete">
+                                                <i className="fas fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    {freteConsultado ?
+                                        (<div className="grid">
+                                            <div className="row">
+                                                <div className="col-2">
+                                                    <div className="d-flex">
+                                                        <span className="p-1">
+                                                            PAC
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="col-2">
+                                                    <div className="d-flex">
+                                                        <span className="p-1">
+                                                            {valorFreteConvertidoParaFloat.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-4">
+                                                    <div className="d-flex">
+                                                        <span className="p-1">
+                                                            {resultadoConsultaCorreios.PrazoEntrega} dias úteis
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>)
+                                        : null}
                                 </div>
-                            </form>
-                        </div>
-                        <div className="col-4">
-                            <h4>Frete: {valorFreteConsultado.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
-                            <h4>Total: {calculaTotal().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
-                        </div>
-                        <div className="col-4">
-                            <div className="d-inline">
-                                <Link to="/" style={{ textDecoration: "none" }}>
-                                    <button className="btn-limparCarrinho" onClick={() => { limparCarrinho(); }}>
-                                        Limpar carrinho
-                                    </button>
-                                </Link>
+                                <div className="col-4">
+                                    {freteConsultado ?
+                                        (<h4>Frete: {valorFreteConvertidoParaFloat.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>)
+                                        : <h4>R$ 0,00</h4>}
+
+                                    <h4>Total: {calculaTotal().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
+                                </div>
                             </div>
-                            <div className="d-inline">
-                                <Link to="/payment" style={{ textDecoration: "none" }}>
-                                    <button className="btn-selecionarPagamento">Selecionar pagamento</button>
-                                </Link>
-                            </div>
+                        </div>
+                        <div className="col-2">
+                            <Link to="/" style={{ textDecoration: "none" }}>
+                                <button className="btn-limparCarrinho" onClick={() => { limparCarrinho(); }}>
+                                    Limpar carrinho
+                                </button>
+                            </Link>
+                            <Link to="/payment" style={{ textDecoration: "none" }}>
+                                <button className="btn-selecionarPagamento">Selecionar pagamento</button>
+                            </Link>
                         </div>
                     </ButtonWrapper>
                 </div>
@@ -76,47 +112,45 @@ display: flex;
     width: 3.5rem;
 }
 .btn-limparCarrinho{
-    width: 17rem;
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: var(--mainOrange);
+    font-size: 1.3rem;
     display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    border: solid #337FED 0;
     cursor: pointer;
-    margin: 0.2rem 0.5rem 0.5rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainRed);
-    color: var(--mainRed);
+    padding: 0.4rem 1.2rem;
+    margin: 0 0.5rem 0.5rem 0;
+    color: var(--mainWhite);
 }
 .btn-limparCarrinho:hover{
-    background: var(--mainRed);
-    color: var(--mainWhite);
-}
-.btn-limparCarrinho:focus{
-    outline: none;
+    background: #C98206;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 .btn-selecionarPagamento{
-    width: 17rem;
-    text-transform: capitalized;
-    background: transparent;
-    font-size: 1.6rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background-color: #3D94F6;
+    font-size: 1.3rem;
     display: inline;
-    border: 0.05rem solid;
-    border-radius: 0.5rem;
-    padding: 0.2rem 0.5rem;
+    border: solid #337FED 0;
     cursor: pointer;
-    margin: 0.2rem 0.5rem 0.2rem 0;
-    transition: all 0.5s ease-in-out;
-    border-color: var(--mainGreen);
-    color: var(--mainGreen);
-}
-.btn-selecionarPagamento:hover{
-    background: var(--mainGreen);
+    padding: 0.4rem 1.2rem;
+    margin: 0 0.5rem 0.5rem 0;
     color: var(--mainWhite);
 }
-.btn-selecionarPagamento:focus{
-    outline: none;
+.btn-selecionarPagamento:hover{
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 `;

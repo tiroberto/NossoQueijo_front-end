@@ -8,31 +8,80 @@ import { Link } from "react-router-dom";
 import StatusPedido from "./StatusPedido";
 import EnderecoEntregaPedido from "./EnderecoEntregaPedido";
 import FormaPagamentoPedido from "./FormaPagamentoPedido";
+import BotaoVoltar from "../ButtonVoltar";
 
 export default class DetalhesPedido extends Component {
     render() {
         return (
             <ProdutoConsumer>
                 {value => {
-                    const { idPedido, valorFrete, formaPagamento, status, pedidoProdutos, enderecoEntrega } = value.detalhesPedido;
-                    const { calcularValorTotalPedido, calcularTotalProdutosPedido } = value;
-                    //var freteFormatado = valorFrete.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",");
+                    const { idPedido, valorFrete, data, formaPagamento, status, pedidoProdutos, enderecoEntrega } = value.detalhesPedido;
+
+                    function dataFormatada(data) {
+                        let dataTemp = new Date(data),
+                            dia = dataTemp.getDate().toString().padStart(2, "0"),
+                            mes = (dataTemp.getMonth() + 1).toString().padStart(2, "0"),
+                            ano = dataTemp.getFullYear();
+                        return `${dia}/${mes}/${ano}`;
+                    }
+
+                    function calcularValorTotalPedido() {
+                        var total = 0;
+                        for (var i = 0; i < pedidoProdutos.length; i++)
+                            total += pedidoProdutos[i].quantidade * pedidoProdutos[i].produto.preco;
+                        total += valorFrete;
+                        return total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",");
+                    }
+
+                    function calcularValorPedido() {
+                        var total = 0;
+                        for (var i = 0; i < pedidoProdutos.length; i++)
+                            total += pedidoProdutos[i].quantidade * pedidoProdutos[i].produto.preco;
+                        return total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",");
+                    }
+
+                    function calcularTotalProdutosPedido() {
+                        var totalProdutos = 0;
+                        for (var i = 0; i < pedidoProdutos.length; i++)
+                            totalProdutos += pedidoProdutos[i].quantidade;
+                        return totalProdutos;
+                    }
+
                     return (
                         <DetalhesPedidoWrapper className="py-5 container background-white">
                             <div className="container">
                                 <Link to="/user" className="col-6 ml-auto" style={{ textDecoration: "none" }}>
-                                    <button className="btn-voltar">
-                                        <span className="m-2">
-                                            <i className="fas fa-arrow-left" />
-                                        </span>
-                                        Voltar
-                                    </button>
+                                    <BotaoVoltar />
                                 </Link>
                             </div>
                             <Title name="PEDIDO " title={`#${idPedido}`} />
-                            <div className="col-12 text-center mt-4 border-top p-4">
-                                <h4>total pedido: R$ {calcularValorTotalPedido(idPedido)}</h4>
-                                <h4>quantidade de produtos: {calcularTotalProdutosPedido(idPedido)}</h4>
+                            <div className="row text-center mt-4 border-top p-4">
+                                <div className="col-6">
+                                    <div className="row">
+                                        <div className="col-6 d-flex align-items-end flex-column">
+                                            <h4>valor pedido:</h4>
+                                            <h4>valor frete:</h4>
+                                            <h4>Total:</h4><br />
+                                        </div>
+                                        <div className="col-6 d-flex align-items-start flex-column">
+                                            <h4>{calcularValorPedido(idPedido)}</h4>
+                                            <h4>{valorFrete.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
+                                            <h4>{calcularValorTotalPedido()}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="row">
+                                        <div className="col-6 d-flex align-items-end flex-column">
+                                            <h4>quantidade de produtos:</h4>
+                                            <h4>data:</h4>
+                                        </div>
+                                        <div className="col-6 d-flex align-items-start flex-column">
+                                            <h4>{calcularTotalProdutosPedido(idPedido)}</h4>
+                                            <h4>{dataFormatada(data)}</h4>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className="container">
                                 <div className="row">

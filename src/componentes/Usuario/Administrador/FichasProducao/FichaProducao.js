@@ -4,7 +4,15 @@ import { Link } from "react-router-dom";
 
 export default function FichaProducao(fichaProducao) {
     const { idFichaProducao, data, pedidoProdutos } = fichaProducao.fichaProducao;
-    const { handleDetalheFichaProducao, handleDeleteFichaProducao } = fichaProducao.value;
+    const { handleDetalheFichaProducao, openModalExcluir } = fichaProducao.value;
+
+    function dataFormatada(data) {
+        let dataTemp = new Date(data),
+            dia = dataTemp.getDate().toString().padStart(2, "0"),
+            mes = (dataTemp.getMonth() + 1).toString().padStart(2, "0"),
+            ano = dataTemp.getFullYear();
+        return `${dia}/${mes}/${ano}`;
+    }
 
     return (
         <FichaProducaoWrapper>
@@ -17,7 +25,7 @@ export default function FichaProducao(fichaProducao) {
                             </div>
                         </div>
                         <div className="col-4">
-                            <span>{data}</span>
+                            <span>Data: {dataFormatada(data)}</span>
                         </div>
                         <div className="col-4 detail-button-align-center">
                             <div className="d-inline" onClick={() => { handleDetalheFichaProducao(idFichaProducao) }}>
@@ -31,7 +39,7 @@ export default function FichaProducao(fichaProducao) {
                                 </Link>
                             </div>
                             <div className="d-inline">
-                                <button className="excluir-btn" onClick={() => { handleDeleteFichaProducao(idFichaProducao); }}>
+                                <button className="excluir-btn" onClick={() => { openModalExcluir(idFichaProducao, "fichaProducao"); }}>
                                     <span className="m-2">
                                         <i className="fas fa-trash" />
                                     </span>
@@ -52,15 +60,21 @@ margin-top: 6px;
 padding: 2px;
 .excluir-btn{
     text-transform: capitalized;
-    display: inline;
     margin: 2px 2px;
     padding: 0 0.8rem 0 0.8rem;
-    background: red;
+    background-color: var(--mainRed);
     color: var(--mainWhite);
     border:none;
-    font-size: 1rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
+    font-size: 1.0rem;
+    border-radius: 10px;
+}
+.excluir-btn:hover {
+    background: #BD0202;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 .protocol-order{
     font-size: 1rem;
@@ -82,11 +96,18 @@ padding: 2px;
     text-transform: capitalized;
     margin: 2px 2px;
     padding: 0 0.8rem 0 0.8rem;
-    background: var(--lightBlue);
+    background-color: #3D94F6;
     color: var(--mainWhite);
     border:none;
     font-size: 1.0rem;
-    border-radius:0.4rem;
-    transition: all 0.5s linear;
+    border-radius: 10px;
+}
+.detalhes-btn:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
 }
 `;

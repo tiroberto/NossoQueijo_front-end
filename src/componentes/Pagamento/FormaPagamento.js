@@ -16,7 +16,7 @@ export default class FormaPagamento extends Component {
                         </Link>
                     </div>
                     <div className="card-footer d-flex justify-content-between">
-                        <h3 className="text-blue mb-0">
+                        <h3 className="mb-0">
                             <span className="mr-1">
                                 {descricao}
                             </span>
@@ -37,7 +37,6 @@ const FormaPagamentoWrapper = styled.div`
     transform:scale(1.1);
 }
 .card-footer{
-    background:rgba(210,250,260);
     border-color:transparent;
     transition:all 1s linear;
 }

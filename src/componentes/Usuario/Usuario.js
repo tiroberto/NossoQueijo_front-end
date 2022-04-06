@@ -8,38 +8,32 @@ import { ButtonContainer } from "../Button";
 export default class Usuario extends Component {
     render() {
         const { idUsuario, nome, cpf, email, dataNascimento } = this.props.value.resultLogin.usuario;
+
+        function dataFormatada(data) {
+            let dataTemp = new Date(data),
+                dia = dataTemp.getDate().toString().padStart(2, "0"),
+                mes = (dataTemp.getMonth() + 1).toString().padStart(2, "0"),
+                ano = dataTemp.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+
         return (
             <UsuarioWrapper>
                 <div className="card">
                     <div className="div-title mt-2"><h5>Meus dados</h5></div>
                     <div className="p-4 container">
                         <div className="row">
-                            <div className="col-6">
-                                Nome:
+                            <div className="col-6 d-flex align-items-end flex-column">
+                                <span>Nome:</span>
+                                <span>CPF:</span>
+                                <span>E-mail:</span>
+                                <span>Data nascimento:</span>
                             </div>
-                            <div className="col-6 div-data">
+                            <div className="col-6 d-flex align-items-start flex-column div-data">
                                 <span>{nome}</span>
-                            </div>
-
-                            <div className="col-6">
-                                CPF:
-                            </div>
-                            <div className="col-6 div-data">
                                 <span>{cpf}</span>
-                            </div>
-
-                            <div className="col-6">
-                                E-mail:
-                            </div>
-                            <div className="col-6 div-data">
                                 <span>{email}</span>
-                            </div>
-
-                            <div className="col-6">
-                                Data nascimento:
-                            </div>
-                            <div className="col-6 div-data">
-                                <span>{dataNascimento}</span>
+                                <span>{dataFormatada(dataNascimento)}</span>
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,7 @@ export default function ListaEnderecos({ value }) {
                 <div className="div-title mt-2"><h5>Meus endereços</h5></div>
                 <div className="container p-2">
                     <div className="row align-items-center">
-                        <div className="text-center">
+                        <div className="text-end">
                             <Link to="/new-endereco" style={{ textDecoration: "none" }}>
                                 <ButtonWrapper>
                                     <span className="m-2">
@@ -32,25 +32,28 @@ export default function ListaEnderecos({ value }) {
 }
 
 const ButtonWrapper = styled.button`
-text-align: center;
-text-transform: capitalized;
-background: transparent;
-font-size: 1.2rem;
-border: 0.05rem solid;
-border-radius: 0.5rem;
-padding: 0.2rem 2.4rem 0.2rem 2.4rem;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+color: #FFFFFF;
+font-size: 20px;
+font-weight: 100;
+padding: 0.4rem 0.6rem;
+margin: 0.2rem 0.5rem 0.2rem 0;
+background-color: #3D94F6;
+border: solid #337FED 0;
+text-decoration: none;
+display: inline-block;
 cursor: pointer;
-margin: 0.8rem 5rem 0.2rem 5rem;
-transition: all 0.5s ease-in-out;
-border-color: var(--mainGreen);
-color: var(--mainGreen);
-:hover{
-    background: var(--mainGreen);
-    color: var(--mainWhite);
-}
-:focus{
-    outline: none;
-}
+text-align: center;
+:hover {
+    background: #1E62D0;
+    border: solid #337FED 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
 `;
 
 const ListaEnderecosWrapper = styled.div`
