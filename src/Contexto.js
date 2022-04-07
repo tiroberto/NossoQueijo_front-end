@@ -537,7 +537,6 @@ class ProdutoProvider extends Component {
             this.openSpinner();
             const endereco = this.state.resultLogin.enderecos.find(item => item.idEndereco == idEndereco);
             const valorFrete = this.calcularFreteComParametro(endereco.cep);
-            console.log(endereco);
             this.setState(() => {
                 return { enderecoPedidoSelecionado: endereco, resultadoConsultaCorreios: valorFrete, freteConsultado: true };
             });
@@ -1469,7 +1468,9 @@ class ProdutoProvider extends Component {
 
             console.log(content);
 
-            await axios.post('https://private-cors-server.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
+            //await axios.post('https://private-cors-server.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
+
+            await axios.post('http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
                 queryString.stringify(content),
                 {
                     headers: {
