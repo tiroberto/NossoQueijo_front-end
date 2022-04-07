@@ -862,8 +862,7 @@ class ProdutoProvider extends Component {
             var pedido = {
                 idPedido: 0,
                 usuario: usuarioLogadoPedido,
-                //valorFrete: parseFloat(this.state.resultadoConsultaCorreios.Valor),
-                valorFrete: 0,
+                valorFrete: parseFloat(this.state.resultadoConsultaCorreios.Valor),
                 data: new Date(),
                 formaPagamento: this.state.formaPagamentoSelecionada,
                 enderecoEntrega: this.state.enderecoPedidoSelecionado,
