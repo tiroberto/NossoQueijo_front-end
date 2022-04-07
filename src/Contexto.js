@@ -644,42 +644,41 @@ class ProdutoProvider extends Component {
                 await api.post("/Endereco/salvar", novoEnderecoSalvar)
                     .then((res) => {
                         console.log(res);
+                        var endereco = res.data.result;
                         result = res.data.hasResult;
+                        if (result) {
+                            const cidade = this.state.cidades.find(item => item.idCidade == novoEnderecoSalvar.cidade.idCidade);
+                            novoEnderecoSalvar.cidade = cidade;
+                            let indexEnderecoAntigo = this.state.resultLogin.enderecos.map(item => { return item.idEndereco }).indexOf(novoEnderecoSalvar.idEndereco);
+                            let resultLoginAntigo = this.state.resultLogin;
+                            resultLoginAntigo.enderecos[indexEnderecoAntigo] = novoEnderecoSalvar;
+                            const resultLoginAtualizar = resultLoginAntigo;
+                            this.setState(() => {
+                                return { resultLogin: resultLoginAtualizar, enderecoEditar: novoEnderecoSalvar };
+                            });
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
                     });
-                if (result) {
-                    const cidade = this.state.cidades.find(item => item.idCidade == novoEnderecoSalvar.cidade.idCidade);
-                    novoEnderecoSalvar.cidade = cidade;
-                    let indexEnderecoAntigo = this.state.resultLogin.enderecos.map(item => { return item.idEndereco }).indexOf(novoEnderecoSalvar.idEndereco);
-                    let resultLoginAntigo = this.state.resultLogin;
-                    resultLoginAntigo.enderecos[indexEnderecoAntigo] = novoEnderecoSalvar;
-                    const resultLoginAtualizar = resultLoginAntigo;
-                    this.setState(() => {
-                        return { resultLogin: resultLoginAtualizar, enderecoEditar: novoEnderecoSalvar };
-                    });
-                }
             }
             else {
                 var resultLoginAtualizar = this.state.resultLogin;
                 await api.post("/Endereco/salvar", novoEnderecoSalvar)
                     .then((res) => {
                         console.log(res);
-                        novoEnderecoSalvar.idEndereco = res.data.result.idEndereco;
+                        novoEnderecoSalvar = res.data.result;
                         result = res.data.hasResult;
+                        if (novoEnderecoSalvar.idEndereco > 0 && result) {
+                            resultLoginAtualizar.enderecos.push(novoEnderecoSalvar);
+                            this.setState(() => {
+                                return { resultLogin: resultLoginAtualizar };
+                            });
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
                     });
-                if (novoEnderecoSalvar.idEndereco > 0 && result) {
-                    const cidade = this.state.cidades.find(item => item.idCidade == novoEnderecoSalvar.cidade.idCidade);
-                    novoEnderecoSalvar.cidade = cidade;
-                    resultLoginAtualizar.enderecos.push(novoEnderecoSalvar);
-                    this.setState(() => {
-                        return { resultLogin: resultLoginAtualizar };
-                    });
-                }
             }
             this.closeSpinner();
             this.openModalMensagem("Salvo com sucesso!", "/user");
