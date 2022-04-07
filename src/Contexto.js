@@ -891,11 +891,11 @@ class ProdutoProvider extends Component {
             console.log(pedido);
             await api.post("/Pedido/salvar", pedido)
                 .then((res) => {
-                    console.log(res);
                     pedido = res.data.result;
                     pedido.pedidoProdutos.forEach(item => {
-                        item.idPedido = res.data.result.idPedido;
-                    })
+                        item.idPedido = pedido.idPedido;
+                        item.produto = this.state.produtos.find(x => x.idProduto == item.idProduto);
+                    });
                     result = res.data.hasResult;
                     if (pedido.idPedido > 0 && result) {
                         resultLoginAtualizar.pedidos.push(pedido);
@@ -912,6 +912,7 @@ class ProdutoProvider extends Component {
                         for (let i = 0; i < tempPedidoProdutos.length; i++) {
                             this.getItem(tempPedidoProdutos[i].idProduto).adicionadoAoCarrinho = false;
                         }
+                        console.log(pedido);
                     }
                 })
                 .catch((error) => {
