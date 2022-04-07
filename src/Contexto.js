@@ -891,6 +891,7 @@ class ProdutoProvider extends Component {
                     });
                     result = res.data.hasResult;
                     if (pedido.idPedido > 0 && result) {
+                        pedido.enderecoEntrega = this.state.resultLogin.enderecos.find(x => x.idEndereco == pedido.enderecoEntrega.idEndereco);
                         resultLoginAtualizar.pedidos.push(pedido);
                         this.closeSpinner();
                         this.openModalMensagem("Pedido realizado!", "/");
