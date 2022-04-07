@@ -9,16 +9,17 @@ export default class ModalEditar extends Component {
             <ProdutoConsumer>
                 {(value) => {
                     const { openSpinner, closeSpinner, openEditarModal, closeEditarModal, statusList, editarStatusPedido, modalEditarStatusOpen } = value;
-                    const { idPedido, usuario, formaPagamento, status, valorFrete, pedidoProdutos, enderecoEntrega } = value.detalhesPedidoAdmin;
+                    const { idPedido, usuario, formaPagamento, status, data, valorFrete, pedidoProdutos, enderecoEntrega } = value.detalhesPedidoAdmin;
 
                     const send = (event) => {
                         event.preventDefault();
-                        var select = document.querySelector("select[id=selectStatus]");
+                        var select = event.target.elements.selectStatus;
 
                         if (select.value > 0) {
                             const pedidoEditar = {
                                 idPedido: idPedido,
                                 usuario: usuario,
+                                data: data,
                                 valorFrete: valorFrete,
                                 formaPagamento: formaPagamento,
                                 status: { idStatus: select.value },

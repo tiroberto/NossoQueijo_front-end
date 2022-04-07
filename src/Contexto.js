@@ -560,7 +560,7 @@ class ProdutoProvider extends Component {
                         let indexProdutoExcluir = this.state.produtos.map(item => { return item.idProduto }).indexOf(idProduto);
                         let produtosAntigo = this.state.produtos;
                         if (indexProdutoExcluir > -1)
-                            produtosAntigo.splice(indexProdutoExcluir, 1);
+                            produtosAntigo.splice(indexProdutoExcluir, 1, 1);
                         const produtosAtualizar = produtosAntigo;
                         this.setState(() => {
                             return { produtos: produtosAtualizar };
@@ -720,44 +720,44 @@ class ProdutoProvider extends Component {
                     .then(res => {
                         this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
                         console.log(res.data);
+                        this.handleDataCSV();
                     })
                     .catch(err => {
                         console.log(err);
                     });
-                this.handleDataCSV();
             }
             else if (this.state.filtroPedidosAdmin == "status") {
                 await api.get(`/Pedido/listar-por-status?idStatus=${data.idFiltro}`)
                     .then(res => {
                         this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
                         console.log(res.data);
+                        this.handleDataCSV();
                     })
                     .catch(err => {
                         console.log(err);
                     });
-                this.handleDataCSV();
             }
             else if (this.state.filtroPedidosAdmin == "formaPagamento") {
                 await api.get(`/Pedido/listar-por-formapagamento?idFormaPagamento=${data.idFiltro}`)
                     .then(res => {
                         this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
                         console.log(res.data);
+                        this.handleDataCSV();
                     })
                     .catch(err => {
                         console.log(err);
                     });
-                this.handleDataCSV();
             }
             else if (this.state.filtroPedidosAdmin == "periodo") {
                 await api.get(`/Pedido/listar-por-periodo?inicio=${data.dataInicial}&fim=${data.dataFinal}`)
                     .then(res => {
                         this.setState({ pedidosListadosFiltro: res.data.result });
                         console.log(res.data);
+                        this.handleDataCSV();
                     })
                     .catch(err => {
                         console.log(err);
                     });
-                this.handleDataCSV();
             }
             this.closeSpinner();
         }
@@ -801,22 +801,26 @@ class ProdutoProvider extends Component {
             await api.post("/Pedido/salvar", pedidoEditar)
                 .then((res) => {
                     console.log(res);
+
+                    if (res.data.hasResult) {
+                        const status = this.state.statusList.find(item => item.idStatus == pedidoEditar.status.idStatus);
+                        pedidoEditar.status = status;
+                        let indexPedidoEditar = this.state.pedidosListadosFiltro.map(item => { return item.idPedido }).indexOf(pedidoEditar.idPedido);
+                        let pedidosListadosAntigo = this.state.pedidosListadosFiltro;
+                        if (indexPedidoEditar > -1)
+                            pedidosListadosAntigo.splice(indexPedidoEditar, 1, 1);
+                        const pedidosListadosAtualizar = pedidosListadosAntigo;
+                        this.setState(() => {
+                            return { pedidosListadosFiltro: pedidosListadosAtualizar, detalhesPedidoAdmin: pedidoEditar };
+                        });
+                        this.closeSpinner();
+                        this.openModalMensagem("Editado com sucesso!", "/order-detail-admin");
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            const status = this.state.statusList.find(item => item.idStatus == pedidoEditar.status.idStatus);
-            pedidoEditar.status = status;
-            let indexPedidoEditar = this.state.pedidosListadosFiltro.map(item => { return item.idPedido }).indexOf(pedidoEditar.idPedido);
-            let pedidosListadosAntigo = this.state.pedidosListadosFiltro;
-            if (indexPedidoEditar > -1)
-                pedidosListadosAntigo.splice(indexPedidoEditar, 1);
-            const pedidosListadosAtualizar = pedidosListadosAntigo;
-            this.setState(() => {
-                return { pedidosListadosFiltro: pedidosListadosAtualizar, detalhesPedidoAdmin: pedidoEditar };
-            });
             this.closeSpinner();
-            this.openModalMensagem("Editado com sucesso!", "/order-detail-admin");
         }
         catch (error) {
             console.log(error);
@@ -933,7 +937,7 @@ class ProdutoProvider extends Component {
             let indexEnderecoExcluir = this.state.resultLogin.enderecos.map(item => { return item.idEndereco }).indexOf(idEndereco);
             let resultLoginAntigo = this.state.resultLogin;
             if (indexEnderecoExcluir > -1)
-                resultLoginAntigo.enderecos.splice(indexEnderecoExcluir, 1);
+                resultLoginAntigo.enderecos.splice(indexEnderecoExcluir, 1, 1);
             const resultLoginAtualizar = resultLoginAntigo;
             this.setState(() => {
                 return { resultLogin: resultLoginAtualizar };
@@ -959,7 +963,7 @@ class ProdutoProvider extends Component {
             let indexFichaProducaoExcluir = this.state.fichasProducaoListadosFiltro.map(item => { return item.idFichaProducao }).indexOf(idFichaProducao);
             let fichaProducaoListAntigo = this.state.fichasProducaoListadosFiltro;
             if (indexFichaProducaoExcluir > -1)
-                fichaProducaoListAntigo.splice(indexFichaProducaoExcluir, 1);
+                fichaProducaoListAntigo.splice(indexFichaProducaoExcluir, 1, 1);
             const fichaProducaoListAtualizar = fichaProducaoListAntigo;
             this.setState(() => {
                 return { fichasProducaoListadosFiltro: fichaProducaoListAtualizar };
@@ -1049,7 +1053,7 @@ class ProdutoProvider extends Component {
                         let indexPedidoExcluir = this.state.pedidosListadosFiltro.map(item => { return item.idPedido }).indexOf(idPedido);
                         let pedidosListadosFiltroAntigo = this.state.pedidosListadosFiltro;
                         if (indexPedidoExcluir > -1) {
-                            pedidosListadosFiltroAntigo.splice(indexPedidoExcluir, 1);
+                            pedidosListadosFiltroAntigo.splice(indexPedidoExcluir, 1, 1);
                             this.setState(() => {
                                 return { pedidosListadosFiltro: pedidosListadosFiltroAntigo };
                             });
@@ -1181,6 +1185,9 @@ class ProdutoProvider extends Component {
                 idPedido: relatorio[i].idPedido,
                 usuario: relatorio[i].usuario.nome,
                 valorFrete: relatorio[i].valorFrete,
+                enderecoEntrega: relatorio[i].enderecoEntrega,
+                data: relatorio[i].data,
+                pedidoProdutos: relatorio[i].pedidoProdutos,
                 formaPagamento: relatorio[i].formaPagamento.descricao,
                 status: relatorio[i].status.descricao
             });
@@ -1468,7 +1475,7 @@ class ProdutoProvider extends Component {
 
             console.log(content);
 
-            
+
             //await axios.post('http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
             await axios.post('https://cors-everywhere.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
                 queryString.stringify(content),
@@ -1675,7 +1682,7 @@ class ProdutoProvider extends Component {
         const produto = this.getItem(idProduto);
         const index = tempProdutos.indexOf(produto);
         if (index > -1)
-            tempProdutos.splice(index, 1);
+            tempProdutos.splice(index, 1, 1);
         this.setState(() => {
             return { carrinho: tempProdutos };
         });

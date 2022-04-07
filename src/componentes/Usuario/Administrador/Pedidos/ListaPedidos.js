@@ -11,6 +11,7 @@ export default function ListaPedidos({ value }) {
         { label: "Usuario", key: "usuario" },
         { label: "Valor frete", key: "valorFrete" },
         { label: "Status", key: "status" },
+        { label: "Data", key: "data" },
         { label: "Forma de pagamento", key: "formaPagamento" }
     ];
 
