@@ -670,6 +670,7 @@ class ProdutoProvider extends Component {
                         novoEnderecoSalvar = res.data.result;
                         result = res.data.hasResult;
                         if (novoEnderecoSalvar.idEndereco > 0 && result) {
+                            novoEnderecoSalvar.estado = this.state.estados.find(item => item.idEstado == novoEnderecoSalvar.estado.idEstado);
                             resultLoginAtualizar.enderecos.push(novoEnderecoSalvar);
                             this.setState(() => {
                                 return { resultLogin: resultLoginAtualizar };
