@@ -890,34 +890,28 @@ class ProdutoProvider extends Component {
             await api.post("/Pedido/salvar", pedido)
                 .then((res) => {
                     console.log(res);
-                    pedido.idPedido = res.data.result.idPedido;
+                    pedido = res.data.result;
                     pedido.pedidoProdutos.forEach(item => {
                         item.idPedido = res.data.result.idPedido;
                     })
                     result = res.data.hasResult;
+                    if (pedido.idPedido > 0 && result) {
+                        resultLoginAtualizar.pedidos.push(pedido);
+                        this.closeSpinner();
+                        this.openModalMensagem("Pedido realizado!", "/");
+                        this.setState(() => {
+                            return {
+                                resultLogin: resultLoginAtualizar,
+                                detalhesProduto: Object,
+                                carrinho: [],
+                                modalOpen: false
+                            };
+                        });
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            if (pedido.idPedido > 0 && result) {
-                var status = this.state.statusList.find(item => item.idStatus == pedido.status.idStatus);
-                pedido.status = status;
-                for (var i = 0; i < pedido.pedidoProdutos.length; i++) {
-                    var produto = this.state.produtos.find(item => item.idProduto == pedido.pedidoProdutos[i].idProduto);
-                    pedido.pedidoProdutos[i].produto = produto;
-                }
-                resultLoginAtualizar.pedidos.push(pedido);
-                this.closeSpinner();
-                this.openModalMensagem("Pedido realizado!", "/");
-            }
-            this.setState(() => {
-                return {
-                    resultLogin: resultLoginAtualizar,
-                    detalhesProduto: Object,
-                    carrinho: [],
-                    modalOpen: false
-                };
-            });
 
         }
         catch (error) {
