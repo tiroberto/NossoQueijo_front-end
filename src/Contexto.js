@@ -863,7 +863,7 @@ class ProdutoProvider extends Component {
     confirmPedido = async () => {
         try {
             this.openSpinner();
-            const tempPedidoProdutos = this.state.carrinho;
+            var tempPedidoProdutos = this.state.carrinho;
             const usuarioLogadoPedido = this.state.resultLogin.usuario;
             var pedido = {
                 idPedido: 0,
@@ -883,11 +883,11 @@ class ProdutoProvider extends Component {
                     quantidade: tempPedidoProdutos[i].qntdEstoque
                 }
                 pedido.pedidoProdutos.push(pedidoProdutos);
-                this.getItem(tempPedidoProdutos[i].idProduto).adicionadoAoCarrinho = false;
             }
 
             var resultLoginAtualizar = this.state.resultLogin;
             var result = false;
+            console.log(pedido);
             await api.post("/Pedido/salvar", pedido)
                 .then((res) => {
                     console.log(res);
@@ -908,6 +908,9 @@ class ProdutoProvider extends Component {
                                 modalOpen: false
                             };
                         });
+                        for (let i = 0; i < tempPedidoProdutos.length; i++) {
+                            this.getItem(tempPedidoProdutos[i].idProduto).adicionadoAoCarrinho = false;
+                        }
                     }
                 })
                 .catch((error) => {
