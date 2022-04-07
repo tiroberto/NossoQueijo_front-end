@@ -1461,7 +1461,9 @@ class ProdutoProvider extends Component {
                 nVlDiametro: args.nVlDiametro,
                 sCdMaoPropria: "N",
                 nVlValorDeclarado: "0",
-                sCdAvisoRecebimento: "N"
+                sCdAvisoRecebimento: "N",
+                StrRetorno: "xml",
+                nIndicaCalculo: "3"
             };
 
             console.log(content);
