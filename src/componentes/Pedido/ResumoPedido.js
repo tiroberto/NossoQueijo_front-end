@@ -20,12 +20,10 @@ export default class ResumoPedido extends Component {
                                     <Title name="RESUMO DO " title="PEDIDO" />
                                     <PedidoColunas />
                                     <ListaProdutosPedido value={value} />
-                                    <div className="row">
-                                        <div className="col-4">
-                                            <EnderecoSelecionado value={value} />
-                                        </div>
-                                        <div className="col-8">
-                                            <PedidoTotal value={value} />
+                                    <div className="container">
+                                        <div className="row d-flex">
+                                                <EnderecoSelecionado value={value} />
+                                                <PedidoTotal value={value} />
                                         </div>
                                     </div>
                                 </React.Fragment>

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ProdutoConsumer } from "../../../../Contexto";
 import BotaoVoltar from "../../../ButtonVoltar";
 import Title from "../../../Title";
+import CurrencyInput from "react-currency-masked-input";
 
 export default class CadastroFichaProducao extends Component {
     render() {
@@ -90,27 +91,27 @@ export default class CadastroFichaProducao extends Component {
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputVolumePingo">Volume do pingo em litros</label>
-                                                    <input type="text" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputVolumePingo" name="inputVolumePingo" />
+                                                    <CurrencyInput type="number" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputVolumePingo" name="inputVolumePingo" />
                                                     <div className="text-danger" hidden={value.cadastroFichaProducaoInputs[2].errorNotVisible ? true : false}>{value.cadastroFichaProducaoInputs[2].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputVolumeLeite">Volume do leite em litros</label>
-                                                    <input type="text" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputVolumeLeite" name="inputVolumeLeite" aria-describedby="emailHelp" />
+                                                    <CurrencyInput type="number" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputVolumeLeite" name="inputVolumeLeite" aria-describedby="emailHelp" />
                                                     <div className="text-danger" hidden={value.cadastroFichaProducaoInputs[3].errorNotVisible ? true : false}>{value.cadastroFichaProducaoInputs[3].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputVolumeCoalho">Volume do coalho em litros</label>
-                                                    <input type="text" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputVolumeCoalho" name="inputVolumeCoalho" />
+                                                    <CurrencyInput type="number" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputVolumeCoalho" name="inputVolumeCoalho" />
                                                     <div className="text-danger" hidden={value.cadastroFichaProducaoInputs[4].errorNotVisible ? true : false}>{value.cadastroFichaProducaoInputs[4].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputQntdSal">Quantidade de sal em kg</label>
-                                                    <input type="text" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputQntdSal" name="inputQntdSal" />
+                                                    <CurrencyInput type="number" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputQntdSal" name="inputQntdSal" />
                                                     <div className="text-danger" hidden={value.cadastroFichaProducaoInputs[5].errorNotVisible ? true : false}>{value.cadastroFichaProducaoInputs[5].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputQntdProduzida">Quantidade produzida</label>
-                                                    <input type="text" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputQntdProduzida" name="inputQntdProduzida" />
+                                                    <input type="number" onChange={() => { value.handleChangeCadastroFichaProducao(); }} className="form-control" id="inputQntdProduzida" name="inputQntdProduzida" />
                                                     <div className="text-danger" hidden={value.cadastroFichaProducaoInputs[6].errorNotVisible ? true : false}>{value.cadastroFichaProducaoInputs[6].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
@@ -176,6 +177,9 @@ input {
 }
 h3 {
     color: var(--mainBlue);
+}
+select {
+    font-family: "Roboto Condensed";
 }
 .btn-submit{
     text-transform: capitalized;

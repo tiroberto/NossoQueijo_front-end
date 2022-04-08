@@ -5,7 +5,7 @@ import styled from "styled-components";
 export default function EnderecoSelecionado(value) {
     const { idEndereco, rua, numero, bairro, cidade, cep, complemento } = value.value.enderecoPedidoSelecionado;
     return (
-        <EnderecoSelecionadoWrapper className="mt-4 mx-4">
+        <EnderecoSelecionadoWrapper className="col-lg-4 my-3">
             <div className="card">
                 <div className="div-title mt-2"><h5>Endereço para entrega</h5></div>
                 <div className="pt-3 container">
@@ -33,11 +33,10 @@ export default function EnderecoSelecionado(value) {
 }
 
 const EnderecoSelecionadoWrapper = styled.div`
+display: flex;
+minWidth: auto;
 .dados{
     font-family: "Roboto Condensed";
-}
-.div-data{
-    display: inline;
 }
 .div-title{
     text-align: center;

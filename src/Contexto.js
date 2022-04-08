@@ -16,6 +16,7 @@ class ProdutoProvider extends Component {
         resultadoConsultaCorreios: { Valor: 0 },
         freteConsultado: false,
         produtosListaBusca: [],
+        showResultadoBusca: false,
         pathModalMensagem: "",
         dataFichaProducaoCSV: [],
         dataCSV: [],
@@ -255,26 +256,21 @@ class ProdutoProvider extends Component {
     };
 
 
-
-
-
-
-
-
     componentDidMount() {
         this.setProdutos();
         this.setFormasPagamento();
         this.setCidades();
+        this.handleSubmitLogin({ email: "humbertojrpratinha@gmail.com", senha: "418951230hj" });
         this.setEstados();
         this.setStatus();
         this.setUsuarios();
-        this.setFichasProducao();
     };
 
     setFichasProducao = async () => {
         try {
             await api.get('/FichaProducao/listar')
                 .then(res => {
+                    console.log(res.data);
                     this.setState({ fichaProducaoList: res.data });
                 })
                 .catch(err => {
@@ -450,7 +446,7 @@ class ProdutoProvider extends Component {
     };
 
     handleDetalheFichaProducao = idFichaProducao => {
-        const fichaProducao = this.state.fichaProducaoList.find(item => item.idFichaProducao === idFichaProducao);
+        const fichaProducao = this.state.fichasProducaoListadosFiltro.find(item => item.idFichaProducao === idFichaProducao);
         this.setState(() => {
             return { detalhesFichaProducao: fichaProducao };
         });
@@ -516,19 +512,15 @@ class ProdutoProvider extends Component {
         });
     };
 
-    handleBuscaProdutos = () => {
+    handleBuscaProdutos = (campoPesquisa) => {
         var listaProdutos = [];
         var produtos = this.state.produtos;
-        var inputBusca = document.querySelector("input[type=text]").value.toLowerCase();
 
-        if (inputBusca.value != "")
-            for (var i = 0; i < produtos.length; i++) {
-                if (produtos[i].nome.toLowerCase().includes(inputBusca))
-                    listaProdutos.push(produtos[i]);
-            }
-
+        for (var i = 0; i < produtos.length; i++)
+            if (produtos[i].nome.toLowerCase().includes(campoPesquisa))
+                listaProdutos.push(produtos[i]);
         this.setState(() => {
-            return { produtosListaBusca: listaProdutos };
+            return { produtosListaBusca: listaProdutos, showResultadoBusca: true };
         });
     };
 
@@ -581,41 +573,35 @@ class ProdutoProvider extends Component {
     handleSubmitCadastroFichaProducao = async (fichaProducaoSalvar) => {
         try {
             this.openSpinner();
+            let fichaProducaoListFiltroAntigo = this.state.fichasProducaoListadosFiltro;
 
             if (fichaProducaoSalvar.idFichaProducao > 0) {
-                let indexFichaProducaoAntiga = this.state.fichaProducaoList.map(item => { return item.idFichaProducao }).indexOf(fichaProducaoSalvar.idFichaProducao);
+                let indexFichaProducaoAntiga = this.state.fichasProducaoListadosFiltro.map(item => { return item.idFichaProducao }).indexOf(fichaProducaoSalvar.idFichaProducao);
                 fichaProducaoSalvar.usuario = this.state.usuariosList.find(item => item.idUsuario == fichaProducaoSalvar.usuario.idUsuario);
                 fichaProducaoSalvar.produto = this.state.produtos.find(item => item.idProduto == fichaProducaoSalvar.produto.idProduto);
-                let fichaProducaoListAntigo = this.state.fichaProducaoList;
-                fichaProducaoListAntigo[indexFichaProducaoAntiga] = fichaProducaoSalvar;
-                const fichaProducaoListAtualizar = fichaProducaoListAntigo;
 
                 await api.post("/FichaProducao/salvar", fichaProducaoSalvar)
                     .then((res) => {
                         console.log(res);
-                        this.setState(() => {
-                            return { fichaProducaoList: fichaProducaoListAtualizar, detalhesFichaProducao: fichaProducaoSalvar };
-                        });
+                        if (res.data.hasResult) {
+                            fichaProducaoListFiltroAntigo[indexFichaProducaoAntiga] = fichaProducaoSalvar;
+                            const fichaProducaoListAtualizar = fichaProducaoListFiltroAntigo;
+                            this.setState(() => {
+                                return { fichasProducaoListadosFiltro: fichaProducaoListAtualizar, detalhesFichaProducao: fichaProducaoSalvar };
+                            });
+                            this.openModalMensagem("Ficha de produção atualizada com sucesso!", "/admin-fichasproducao");
+                            this.closeSpinner();
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
                     });
             }
             else {
-                var fichaProducaoListAntigo = this.state.fichaProducaoList;
-                fichaProducaoSalvar.usuario = this.state.usuariosList.find(item => item.idUsuario == fichaProducaoSalvar.usuario.idUsuario);
-                fichaProducaoSalvar.produto = this.state.produtos.find(item => item.idProduto == fichaProducaoSalvar.produto.idProduto);
                 await api.post("/FichaProducao/salvar", fichaProducaoSalvar)
                     .then((res) => {
                         console.log(res);
-                        var fichaProducao = res.data.result;
-
                         if (fichaProducao.idFichaProducao > 0) {
-                            fichaProducaoListAntigo.push(fichaProducao);
-                            var fichaProducaoListAtualizar = fichaProducaoListAntigo;
-                            this.setState(() => {
-                                return { fichaProducaoList: fichaProducaoListAtualizar };
-                            });
                             this.openModalMensagem("Ficha de produção cadastrada com sucesso!", "/admin-fichasproducao");
                             this.closeSpinner();
                         }
@@ -624,6 +610,7 @@ class ProdutoProvider extends Component {
                         console.log(error);
                     });
             }
+            this.closeSpinner();
         }
         catch (error) {
             console.log(error);
@@ -953,23 +940,33 @@ class ProdutoProvider extends Component {
     handleDeleteFichaProducao = async (idFichaProducao) => {
         try {
             this.openSpinner();
+            let indexFichaProducaoExcluir = this.state.fichasProducaoListadosFiltro.map(item => { return item.idFichaProducao }).indexOf(idFichaProducao);
+            let fichaProducaoListAntigoFiltro = this.state.fichasProducaoListadosFiltro;
+            let fichaProducaoListAntigo = this.state.fichaProducaoList;
+
+
             await api.delete(`/FichaProducao/excluir?id=${idFichaProducao}`)
                 .then((res) => {
                     console.log(res);
+
+                    if (res.data.isValid) {
+                        console.log(indexFichaProducaoExcluir);
+                        fichaProducaoListAntigoFiltro.splice(indexFichaProducaoExcluir, 1, 1);
+                        fichaProducaoListAntigo.splice(indexFichaProducaoExcluir, 1, 1);
+                        const fichaProducaoListFiltroAtualizar = fichaProducaoListAntigoFiltro;
+                        const fichaProducaoListAtualizar = fichaProducaoListAntigo;
+                        this.setState(() => {
+                            return { fichasProducaoListadosFiltro: fichaProducaoListFiltroAtualizar, fichaProducaoList: fichaProducaoListAtualizar };
+                        });
+                        this.closeSpinner();
+                        this.openModalMensagem("Excluído com sucesso!", "/admin-fichasproducao");
+                        console.log({ fichaProducaoListAntigo, fichaProducaoListAntigoFiltro });
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            let indexFichaProducaoExcluir = this.state.fichasProducaoListadosFiltro.map(item => { return item.idFichaProducao }).indexOf(idFichaProducao);
-            let fichaProducaoListAntigo = this.state.fichasProducaoListadosFiltro;
-            if (indexFichaProducaoExcluir > -1)
-                fichaProducaoListAntigo.splice(indexFichaProducaoExcluir, 1, 1);
-            const fichaProducaoListAtualizar = fichaProducaoListAntigo;
-            this.setState(() => {
-                return { fichasProducaoListadosFiltro: fichaProducaoListAtualizar };
-            });
             this.closeSpinner();
-            this.openModalMensagem("Excluído com sucesso!", "/admin-fichasproducao");
         }
         catch (error) {
             console.log(error);
@@ -1500,11 +1497,10 @@ class ProdutoProvider extends Component {
         }
     };
 
-    calcularFrete = async () => {
+    calcularFrete = async (cep) => {
         try {
             this.openSpinner();
             const queryString = require('query-string');
-            const inputCEP = document.querySelector("input[id=inputCEP]");
             var pesoPedido = 0;
             for (let i = 0; i < this.state.carrinho.length; i++) {
                 pesoPedido += this.state.carrinho[i].peso;
@@ -1513,7 +1509,7 @@ class ProdutoProvider extends Component {
             let args = {
                 // Não se preocupe com a formatação dos valores de entrada do cep, qualquer uma será válida (ex: 21770-200, 21770 200, 21asa!770@###200 e etc),
                 sCepOrigem: "38960000",
-                sCepDestino: this.sanitization(inputCEP.value),
+                sCepDestino: this.sanitization(cep),
                 nVlPeso: `${pesoPedido}`,
                 nCdFormato: 1,
                 nVlComprimento: 20,

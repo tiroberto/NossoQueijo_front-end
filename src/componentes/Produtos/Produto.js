@@ -61,7 +61,6 @@ const ProdutoWrapper = styled.div`
 .card{
     border-radius: 1rem;
     border-color:transparent;
-    transition:all 0.3s linear;
 }
 .card-footer{
     border-radius: 0 0 1rem 1rem;
@@ -82,9 +81,6 @@ const ProdutoWrapper = styled.div`
 }
 .card-img-top{
     transition:all 0.3s linear;    
-}
-.img-container:hover .card-img-top{
-    transform:scale(1.1);
 }
 .cart-btn{
     position:absolute;

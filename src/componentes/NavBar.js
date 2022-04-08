@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import logo from "../Imagens/logo-removebg-preview.png";
-import { Link } from "react-router-dom";
+import logo from "../Imagens/logo-site.png";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { ButtonContainer } from "./Button";
 import { ProdutoConsumer } from "../Contexto";
@@ -11,11 +11,19 @@ export default class NavBar extends Component {
         return (
             <ProdutoConsumer>
                 {value => {
+                    const { handleBuscaProdutos, showResultadoBusca } = value;
+                    const send = (event) => {
+                        event.preventDefault();
+                        var campoPesquisa = event.target.elements.campoPesquisa;
+
+                        if (campoPesquisa.value != "" || campoPesquisa.value != null || campoPesquisa.value != typeof undefined)
+                            handleBuscaProdutos(campoPesquisa.value);
+                    }
                     return (
                         <NavWrapper className="navbar navbar-expand-sm navbar-dark px-sm-5">
                             <div className="navbar-header">
                                 <Link to="/">
-                                    <img src={logo} alt="nossoqueijo" className="navbar-brand" />
+                                    <img src={logo} alt="nossoqueijo" className="navbar-brand m-auto" />
                                 </Link>
                             </div>
                             <div className="navbar-collapse collapse">
@@ -27,25 +35,20 @@ export default class NavBar extends Component {
                                     </li>
                                 </ul>
                             </div>
-                            <div className="navbar-collapse collapse"></div>
-                            <div className="navbar-collapse collapse"></div>
-                            <div className="navbar-collapse collapse"></div>
-                            <div className="navbar-collapse collapse"></div>
-                            <div className="navbar-collapse collapse"></div>
-                            <div className="navbar-collapse collapse">
-                                <div className="input-group ps-5" id="busca">
-                                    <div className="form-outline">
-                                        <input type="text" className="form-control rounded" placeholder="Procurar" aria-label="Procurar"
+                            <div className="navbar-collapse collapse justify-content-end">
+                                <div className="busca">
+                                    {showResultadoBusca ? <Redirect to="/search-result" /> : null}
+
+                                    <form onSubmit={send} action="/search-result" className="d-flex">
+                                        <input type="text" className="form-control rounded" id="campoPesquisa" name="campoPesquisa" placeholder="Procurar" aria-label="Procurar"
                                             aria-describedby="search-addon" />
-                                    </div>
-                                    <span onClick={() => { value.handleBuscaProdutos(); }} className="input-group-text border-0 search-btn" id="search-addon">
-                                        <Link to="/search-result">
-                                            <i className="fas fa-search" />
-                                        </Link>
-                                    </span>
+                                        <button type="submit" className="input-group-text search-btn nav-link" id="search-addon">
+                                            <i className="fas text-dark fa-search" />
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                            <div className="navbar-collapse collapse">
+                            <div className="navbar-collapse collapse justify-content-end">
                                 <Link to="/user" className="ml-auto">
                                     <button className="BUTTON_TRS">
                                         <span className="m-2">
@@ -79,13 +82,24 @@ export default class NavBar extends Component {
 
 const NavWrapper = styled.nav`
 background: var(--mainDark);
+img{
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.div-imagem{
+    position: relative;
+    background-color: rgba(255,255,255,0.5);
+}
 .nav-link{
     color: var(--mainWhite) !important;
     font-size: 1.3rem;
-    text-transform capitalize;
+    text-transform: capitalize;
 }
-#busca{
+.busca{
     font-family: "Roboto Condensed";
+    width: 100%;
 }
 .search-btn:hover{
     cursor: pointer;

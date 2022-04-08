@@ -22,34 +22,43 @@ export default class PedidoTotal extends Component {
                     }
 
                     return (
-                        <React.Fragment>
-                            <PedidoTotalWrapper>
-                                <div className="container-fluid text-left d-none d-lg-block">
-                                    <div className="row">
-                                        <div className="col-6 mx-auto  mt-4">
-                                            <div className="row">
-                                                <div className="col-6">
-                                                    <h4>Forma de pagamento:</h4>
-                                                    <h4>Frete:</h4>
-                                                    <h4>Total:</h4>
-                                                </div>
-                                                <div className="col-6">
-                                                    <h4>{descricao}</h4>
-                                                    <h4>{valorFrete.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
-                                                    <h4>{valorTotal().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
-                                                </div>
+                        <PedidoTotalWrapper className="col-lg-8 my-3">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-8 mx-auto">
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <h4>Forma de pagamento:</h4>
                                             </div>
-
+                                            <div className="col-6">
+                                                <h4>{descricao}</h4>
+                                            </div>
                                         </div>
-                                        <div className="col-3 mx-auto  mt-4">
-                                            <ButtonWrapper>
-                                                <button className="btn-confirmar" onClick={() => { confirmPedido(); }}>Confirmar pedido</button>
-                                            </ButtonWrapper>
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <h4>Frete:</h4>
+                                            </div>
+                                            <div className="col-6">
+                                                <h4>{valorFrete.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <h4>Total:</h4>
+                                            </div>
+                                            <div className="col-6">
+                                                <h4>{valorTotal().toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(".", ",")}</h4>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className="col-4 mx-auto">
+                                        <ButtonWrapper>
+                                            <button className="btn-confirmar" onClick={() => { confirmPedido(); }}>Confirmar pedido</button>
+                                        </ButtonWrapper>
+                                    </div>
                                 </div>
-                            </PedidoTotalWrapper>
-                        </React.Fragment>
+                            </div>
+                        </PedidoTotalWrapper>
                     )
                 }
                 }
