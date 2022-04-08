@@ -601,6 +601,7 @@ class ProdutoProvider extends Component {
                 await api.post("/FichaProducao/salvar", fichaProducaoSalvar)
                     .then((res) => {
                         console.log(res);
+                        var fichaProducao = res.data.result;
                         if (fichaProducao.idFichaProducao > 0) {
                             this.openModalMensagem("Ficha de produção cadastrada com sucesso!", "/admin-fichasproducao");
                             this.closeSpinner();
