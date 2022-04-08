@@ -8,7 +8,7 @@ const webAppAWS = "http://nossoqueijowebapi-dev.sa-east-1.elasticbeanstalk.com/a
 const finalUrl = corsEverywhere+webAppAWS;
 
 const api = axios.create({
-    baseURL: webAppAWS,
+    baseURL: finalUrl,
 })
 
 export default api;
