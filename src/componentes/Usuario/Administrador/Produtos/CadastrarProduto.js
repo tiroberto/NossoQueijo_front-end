@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ProdutoConsumer } from "../../../../Contexto";
 import BotaoVoltar from "../../../ButtonVoltar";
 import Title from "../../../Title";
+import CurrencyInput from "react-currency-masked-input";
 
 export default class CadastroProduto extends Component {
     render() {
@@ -68,17 +69,17 @@ export default class CadastroProduto extends Component {
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputPreco">Preço</label>
-                                                    <input type="text" onChange={() => { value.mascaraNumeros("", "inputPreco"); value.handleChangeCadastroProduto(); }} className="form-control" id="inputPreco" name="inputPreco" />
+                                                    <CurrencyInput type="number" onChange={() => { value.handleChangeCadastroProduto(); }} className="form-control" id="inputPreco" name="inputPreco" />
                                                     <div className="text-danger" hidden={value.cadastroProdutoInputs[1].errorNotVisible ? true : false}>{value.cadastroProdutoInputs[1].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputPeso">Peso</label>
-                                                    <input type="text" onChange={() => { value.mascaraNumeros("##.##", "inputPeso"); value.handleChangeCadastroProduto(); }} className="form-control" id="inputPeso" name="inputPeso" />
+                                                    <CurrencyInput type="number" onChange={() => { value.handleChangeCadastroProduto(); }} className="form-control" id="inputPeso" name="inputPeso" />
                                                     <div className="text-danger" hidden={value.cadastroProdutoInputs[2].errorNotVisible ? true : false}>{value.cadastroProdutoInputs[2].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
                                                     <label htmlFor="inputQuantidade">Quantidade</label>
-                                                    <input type="text" onChange={() => { value.mascaraNumeros("", "inputQuantidade"); value.handleChangeCadastroProduto(); }} className="form-control" id="inputQuantidade" name="inputQuantidade" />
+                                                    <input type="number" onChange={() => { value.handleChangeCadastroProduto(); }} className="form-control" id="inputQuantidade" name="inputQuantidade" />
                                                     <div className="text-danger" hidden={value.cadastroProdutoInputs[3].errorNotVisible ? true : false}>{value.cadastroProdutoInputs[3].error}</div>
                                                 </div>
                                                 <div className="form-group mb-3">
