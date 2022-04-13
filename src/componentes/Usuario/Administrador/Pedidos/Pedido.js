@@ -10,6 +10,7 @@ export default function Pedido(pedido) {
         var total = 0;
         for (var i = 0; i < pedidoProdutos.length; i++)
             total += pedidoProdutos[i].quantidade * pedidoProdutos[i].produto.preco;
+        total += valorFrete;
         return total;
     }
 
@@ -46,14 +47,6 @@ export default function Pedido(pedido) {
                                         Detalhes
                                     </button>
                                 </Link>
-                            </div>
-                            <div className="d-inline">
-                                <button className="excluir-btn" onClick={() => { openModalExcluir(idPedido, "pedidoAdmin"); }}>
-                                    <span className="m-2">
-                                        <i className="fas fa-trash" />
-                                    </span>
-                                    Excluir
-                                </button>
                             </div>
                         </div>
                     </div>

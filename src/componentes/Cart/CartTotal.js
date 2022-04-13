@@ -86,9 +86,11 @@ export default function CartTotal({ value }) {
                                     Limpar carrinho
                                 </button>
                             </Link>
-                            <Link to="/payment" style={{ textDecoration: "none" }}>
-                                <button className="btn-selecionarPagamento">Selecionar pagamento</button>
-                            </Link>
+                            {freteConsultado ?
+                                <Link to="/payment" style={{ textDecoration: "none" }}>
+                                    <button className="btn-selecionarPagamento">Selecionar pagamento</button>
+                                </Link>
+                                : <button className="btn-selecionarPagamento" onClick={() => openModalMensagem("Consulte o frete antes de continuar.", "/cart")}>Selecionar pagamento</button>}
                         </div>
                     </ButtonWrapper>
                 </div>

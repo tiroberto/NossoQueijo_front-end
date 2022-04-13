@@ -18,17 +18,17 @@ export default class Pedidos extends Component {
                         const { statusList, dataCSV, formasPagamento, filtroPedidosAdmin, usuariosList, listarPedidosFiltro, pedidosListadosFiltro } = value;
 
                         const filtroSelecionado = () => {
-                            if (filtroPedidosAdmin == "cliente") {
+                            if (filtroPedidosAdmin.filtro == "cliente") {
                                 return usuariosList.map(usuario => {
                                     return <option key={usuario.idUsuario} value={usuario.idUsuario}>{usuario.nome}</option>
                                 })
                             }
-                            else if (filtroPedidosAdmin == "status") {
+                            else if (filtroPedidosAdmin.filtro == "status") {
                                 return statusList.map(status => {
                                     return <option key={status.idStatus} value={status.idStatus}>{status.descricao}</option>
                                 })
                             }
-                            else if (filtroPedidosAdmin == "formaPagamento") {
+                            else if (filtroPedidosAdmin.filtro == "formaPagamento") {
                                 return formasPagamento.map(formaPagamento => {
                                     return <option key={formaPagamento.idFormaPagamento} value={formaPagamento.idFormaPagamento}>{formaPagamento.descricao}</option>
                                 })
@@ -41,17 +41,19 @@ export default class Pedidos extends Component {
                             var dataInicial = document.querySelector("input[id=PeriodoInicio]");
                             var dataFinal = document.querySelector("input[id=PeriodoFim]");
 
-                            if (filtroPedidosAdmin == "periodo")
+                            if (filtroPedidosAdmin.filtro == "periodo")
                                 var data = {
                                     idFiltro: 0,
                                     dataInicial: dataInicial.value,
-                                    dataFinal: dataFinal.value
+                                    dataFinal: dataFinal.value,
+                                    pagina: 1
                                 };
                             else
                                 var data = {
                                     idFiltro: select.value,
                                     dataInicial: "",
-                                    dataFinal: ""
+                                    dataFinal: "",
+                                    pagina: 1
                                 };
 
                             if (data.idFiltro != null || data.idFiltro != "" || typeof data.idFiltro != "undefined" ||
@@ -94,7 +96,7 @@ export default class Pedidos extends Component {
                                                 <label htmlFor="rdPeriodo">Período</label>
                                             </div>
                                             <form onSubmit={send} style={{ marginTop: "0.7rem" }}>
-                                                {(filtroPedidosAdmin != "periodo") ?
+                                                {(filtroPedidosAdmin.filtro != "periodo") ?
                                                     <select className="form-control" defaultValue="" id="selectFiltro" name="selectFiltro">
                                                         <option disabled hidden>--Selecione--</option>
                                                         {filtroSelecionado()}
@@ -120,7 +122,7 @@ export default class Pedidos extends Component {
                                                 </ButtonWrapper>
                                             </form>
                                         </div>
-                                        {(pedidosListadosFiltro.length > 0) ?
+                                        {(pedidosListadosFiltro.items.length > 0) ?
                                             <ListaPedidos value={value} />
                                             : "Vazio"
                                         }

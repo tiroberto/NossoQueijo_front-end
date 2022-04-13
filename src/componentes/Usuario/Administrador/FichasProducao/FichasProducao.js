@@ -14,6 +14,7 @@ export default class FichasProducao extends Component {
             <ProdutoConsumer>
                 {value => {
                     const { fichasProducaoListadosFiltro, filtroFichaProducao, usuariosList, listarFichasProducaoFiltro } = value;
+                    const { items } = fichasProducaoListadosFiltro;
 
                     const usuariosAdmin = () => {
                         var usuarios = []
@@ -33,16 +34,16 @@ export default class FichasProducao extends Component {
                         var periodoFinal = event.target.elements.PeriodoFim;
                         var data = {};
 
-                        if (filtroFichaProducao == "periodo") {
-                            if (periodoFinal.value != "" || periodoFinal.value != typeof undefined || periodoFinal.value != null && 
-                            periodoInicial.value != "" || periodoInicial.value != typeof undefined || periodoInicial.value != null ) {
-                                data = { periodoInicio: periodoInicial.value, periodoFim: periodoFinal.value };
+                        if (filtroFichaProducao.filtro == "periodo") {
+                            if (periodoFinal.value != "" || periodoFinal.value != typeof undefined || periodoFinal.value != null &&
+                                periodoInicial.value != "" || periodoInicial.value != typeof undefined || periodoInicial.value != null) {
+                                data = { periodoInicio: periodoInicial.value, periodoFim: periodoFinal.value, pagina: 1 };
                                 listarFichasProducaoFiltro(data);
                             }
                         }
-                        else if (filtroFichaProducao == "usuario") {
-                            if (selectUsuario.value != "" || selectUsuario.value != typeof undefined || selectUsuario.value != null ) {
-                                data = { idUsuario: selectUsuario.value };
+                        else if (filtroFichaProducao.filtro == "usuario") {
+                            if (selectUsuario.value != "" || selectUsuario.value != typeof undefined || selectUsuario.value != null) {
+                                data = { idUsuario: selectUsuario.value, pagina: 1 };
                                 listarFichasProducaoFiltro(data);
                             }
                         }
@@ -83,7 +84,7 @@ export default class FichasProducao extends Component {
                                                 <label htmlFor="rdPeriodo">Período</label>
                                             </div>
                                             <form onSubmit={send}>
-                                                {(filtroFichaProducao == "usuario") ?
+                                                {(filtroFichaProducao.filtro == "usuario") ?
                                                     <div className="form-group my-3">
                                                         <label htmlFor="selectUsuario">Usuário</label>
                                                         <select className="form-control" defaultValue="" id="selectUsuario" name="selectUsuario">
@@ -92,7 +93,7 @@ export default class FichasProducao extends Component {
                                                     </div>
                                                     : null
                                                 }
-                                                {(filtroFichaProducao == "periodo") ?
+                                                {(filtroFichaProducao.filtro == "periodo") ?
                                                     <div className="my-3">
                                                         <div className="form-group">
                                                             <label htmlFor="PeriodoInicio">Período inicial</label>
@@ -113,7 +114,7 @@ export default class FichasProducao extends Component {
                                             </form>
                                         </div>
                                     </div>
-                                    {(fichasProducaoListadosFiltro.length > 0) ?
+                                    {(items.length > 0) ?
                                         <ListaFichaProducao value={value} />
                                         : "Vazio"
                                     }

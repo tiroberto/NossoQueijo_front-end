@@ -33,14 +33,6 @@ export default function Produto(produto) {
                                     </button>
                                 </Link>
                             </div>
-                            <div className="d-inline">
-                                <button className="excluir-btn" onClick={() => { openModalExcluir(idProduto, "produtoAdmin"); }}>
-                                    <span className="m-2">
-                                        <i className="fas fa-trash" />
-                                    </span>
-                                    Excluir
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

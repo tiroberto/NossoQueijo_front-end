@@ -58,14 +58,6 @@ export default class DetalhesPedidoAdmin extends Component {
                                         <BotaoVoltar />
                                     </Link>
                                 </div>
-                                <div className="col-6 d-flex justify-content-end">
-                                    <button className="excluir-btn" onClick={() => openModalExcluir(idPedido, "pedidoAdmin")}>
-                                        <span className="m-2">
-                                            <i className="fas fa-trash" />
-                                        </span>
-                                        Excluir
-                                    </button>
-                                </div>
                             </div>
                             <Title name="PEDIDO " title={`#${idPedido}`} />
                             <div className="row text-center mt-4 border-top p-4">

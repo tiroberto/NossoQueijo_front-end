@@ -15,7 +15,7 @@ export default class Produtos extends Component {
             <>
                 <ProdutoConsumer>
                     {value => {
-                        const { produtos, dataCSV, formasPagamento, filtroProdutosAdmin, usuariosList, listarProdutosFiltro, ProdutosListadosFiltro } = value;
+                        const { produtosListadosAdmin, listarProdutosPaginado } = value;
 
                         return (
                             <div className="container py-5 background-white">
@@ -37,8 +37,14 @@ export default class Produtos extends Component {
                                                         Novo
                                                     </button>
                                                 </Link>
+                                                <button onClick={() => listarProdutosPaginado(1)} className="btn-novo">
+                                                    <span className="m-2">
+                                                        <i className="fa fa-bars"></i>
+                                                    </span>
+                                                    Listar
+                                                </button>
                                             </div>
-                                            {(produtos.length > 0) ?
+                                            {(produtosListadosAdmin.items.length > 0) ?
                                                 <ListaProdutos value={value} />
                                                 : "Vazio"
                                             }

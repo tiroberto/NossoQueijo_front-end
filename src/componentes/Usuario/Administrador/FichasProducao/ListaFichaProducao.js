@@ -2,9 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import FichaProducao from "./FichaProducao";
 import { CSVLink } from "react-csv";
+import { render } from "@testing-library/react";
+import Paginacao from "../../../Paginacao";
 
 export default function ListaFichaProducao({ value }) {
-    const { fichasProducaoListadosFiltro, dataFichaProducaoCSV } = value;
+    const { fichasProducaoListadosFiltro, dataFichaProducaoCSV, filtroFichaProducao, listarFichasProducaoFiltro } = value;
+    const { totalItemCount } = fichasProducaoListadosFiltro;
 
     const headersCSV = [
         { label: "ID", key: "idFichaProducao" },
@@ -32,13 +35,16 @@ export default function ListaFichaProducao({ value }) {
                         </CSVLink>
                     </button>
                 </div>
+                <div className="px-4 py-2">Quantidade de resultados: {totalItemCount}</div>
+                <Paginacao value={value} data={fichasProducaoListadosFiltro} local={"fichaProducao"} />
                 <div className="px-4 py-2 container">
                     <div className="row">
-                        {fichasProducaoListadosFiltro.map(fichaProducao => {
+                        {fichasProducaoListadosFiltro.items.map(fichaProducao => {
                             return <FichaProducao key={fichaProducao.idFichaProducao} fichaProducao={fichaProducao} value={value} />
                         })}
                     </div>
                 </div>
+                <Paginacao value={value} data={fichasProducaoListadosFiltro} local={"fichaProducao"} />
             </div>
         </ListaFichaProducaoWrapper>
     );

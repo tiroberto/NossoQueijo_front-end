@@ -7,7 +7,7 @@ export default function Endereco(item) {
     const { handleEnderecoEditar, handleDeleteEndereco, openModalMensagem, openModalExcluir } = item.value;
 
     return (
-        <EnderecoWrapper className="col-6">
+        <EnderecoWrapper className="col-6" key={idEndereco}>
             <div className="pt-3 card">
                 <div className="container">
                     <div className="row">
@@ -21,27 +21,21 @@ export default function Endereco(item) {
                             {complemento}
                         </span>
                         <span>
-                            {cep.replace(/\D/g, "")}
+                            {cep}
                         </span>
                         <span>
                             {cidade.nome} - {cidade.estado.uf}
                         </span>
                     </div>
-                    <div className="row">
-                        <div className="d-flex">
-                            <Link to="/edit-address" className="ml-auto">
-                                <button className="enderecoeditar-btn" onClick={() => { handleEnderecoEditar(idEndereco); }}>
-                                    <span className="m-2">
-                                        <i className="fa fa-pencil" />
-                                    </span>
-                                </button>
-                            </Link>
-                            <button className="enderecoexcluir-btn" onClick={() => { openModalExcluir(idEndereco, "endereco"); }}>
-                                <span className="m-2">
-                                    <i className="fa fa-trash" />
+                    <div className="row d-flex text-center my-2">
+                        <Link to="/edit-address" className="ml-auto">
+                            <button className="enderecoeditar-btn" onClick={() => { handleEnderecoEditar(idEndereco); }}>
+                                <span className="p-2">
+                                    <i className="fa fa-pencil px-2" />
+                                    Editar
                                 </span>
                             </button>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>

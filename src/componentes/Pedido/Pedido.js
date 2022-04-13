@@ -10,6 +10,7 @@ export default function Pedido(item) {
         pedidoProdutos.forEach(item => {
             valorTotal += item.quantidade * item.produto.preco;
         });
+        valorTotal += valorFrete;
         return valorTotal;
     }
 
@@ -44,7 +45,7 @@ export default function Pedido(item) {
                                         <span className="m-2">
                                             <i className="fas fa-plus" />
                                         </span>
-                                            Detalhes
+                                        Detalhes
                                     </button>
                                 </Link>
                             </div>

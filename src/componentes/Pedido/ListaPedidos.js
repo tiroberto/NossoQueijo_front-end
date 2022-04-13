@@ -3,14 +3,14 @@ import styled from "styled-components";
 import Pedido from "./Pedido";
 
 export default function ListaPedidos({ value }) {
-    const { pedidos } = value.resultLogin;
+    const { items } = value.resultLogin.pedidos;
     return (
         <ListaPedidosWrapper>
             <div className="card">
                 <div className="div-title mt-2"><h5>Meus pedidos</h5></div>
                 <div className="p-2 container">
                     <div className="row">
-                        {pedidos.map(item => {                            
+                        {items.map(item => {                            
                             return <Pedido key={item.idPedido} item={item} value={value} />
                         })}
                     </div>

@@ -39,9 +39,6 @@ export default class DetalhesProdutoAdmin extends Component {
                                                     <i className="fa fa-pencil mx-2" />Editar
                                                 </button>
                                             </Link>
-                                            <button className="excluir-btn" onClick={() => { value.openModalExcluir(value.detalhesProdutoAdmin.idProduto, "produtoAdmin") }}>
-                                                <i className="fa fa-trash mx-2" />Excluir
-                                            </button>
                                         </div>
                                     </div>
                                 </div>

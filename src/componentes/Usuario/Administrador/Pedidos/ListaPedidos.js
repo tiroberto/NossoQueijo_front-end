@@ -2,9 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import Pedido from "./Pedido";
 import { CSVLink } from "react-csv";
+import Paginacao from "../../../Paginacao";
 
 export default function ListaPedidos({ value }) {
-    const { pedidosListadosFiltro, dataCSV } = value;
+    const { pedidosListadosFiltro, dataCSV, filtroPedidosAdmin, listarPedidosFiltro } = value;
+    const { totalItemCount } = pedidosListadosFiltro;
 
     const headersCSV = [
         { label: "ID", key: "idPedido" },
@@ -29,13 +31,16 @@ export default function ListaPedidos({ value }) {
                         </CSVLink>
                     </button>
                 </div>
+                <div className="px-4 py-2">Quantidade de resultados: {totalItemCount}</div>
+                <Paginacao value={value} data={pedidosListadosFiltro} local={"pedido"} />
                 <div className="px-4 py-2 container">
                     <div className="row">
-                        {pedidosListadosFiltro.map(pedido => {
+                        {pedidosListadosFiltro.items.map(pedido => {
                             return <Pedido key={pedido.idPedido} pedido={pedido} value={value} />
                         })}
                     </div>
                 </div>
+                <Paginacao value={value} data={pedidosListadosFiltro} local={"pedido"} />
             </div>
         </ListaPedidosWrapper>
     );
@@ -82,4 +87,20 @@ h5{
     border-radius: 10px;
     text-decoration: none;
  }
+ .FlexContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    overflow: auto;
+    flex-direction: row;
+}
+
+.FlexContainer div {
+    padding 1px 5px;
+    margin: 5px;
+    background-color: var(--lightBlue2);
+    cursor: pointer;
+}
 `;

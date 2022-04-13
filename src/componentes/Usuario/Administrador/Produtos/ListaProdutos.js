@@ -5,7 +5,7 @@ import Produto from "./Produto";
 import ProdutoColunas from "./ProdutoColunas";
 
 export default function ListaProdutos({ value }) {
-    const { produtos, dataCSV } = value;
+    const { produtosListadosAdmin } = value;
 
     return (
         <ListaProdutosWrapper>
@@ -13,7 +13,7 @@ export default function ListaProdutos({ value }) {
                 <div className="px-4 py-4 container">
                     <div className="row">
                         <ProdutoColunas />
-                        {produtos.map(produto => {
+                        {produtosListadosAdmin.items.map(produto => {
                             return <Produto key={produto.idProduto} produto={produto} value={value} />
                         })}
                     </div>

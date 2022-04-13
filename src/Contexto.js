@@ -26,10 +26,11 @@ class ProdutoProvider extends Component {
         detalhesFichaProducao: Object,
         idFiltroAtual: 0,
         spinnerOpen: false,
-        pedidosListadosFiltro: [],
-        fichasProducaoListadosFiltro: [],
-        filtroPedidosAdmin: "",
-        filtroFichaProducao: "",
+        produtosListadosAdmin: { items: [] },
+        pedidosListadosFiltro: { items: [] },
+        fichasProducaoListadosFiltro: { items: [] },
+        filtroPedidosAdmin: { idFiltro: "", filtro: "", dataInicial: "", dataFinal: "", paginaAtual: 0 },
+        filtroFichaProducao: { idUsuario: "", filtro: "", periodoInicio: "", periodoFim: "", paginaAtual: 0 },
         usuariosList: [],
         statusList: [],
         cidadesMostrar: [],
@@ -248,7 +249,7 @@ class ProdutoProvider extends Component {
         resultLogin: {
             usuario: Object,
             message: "",
-            pedidos: [],
+            pedidos: { items: [] },
             enderecos: [],
             logado: false,
             token: ""
@@ -260,7 +261,6 @@ class ProdutoProvider extends Component {
         this.setProdutos();
         this.setFormasPagamento();
         this.setCidades();
-        this.handleSubmitLogin({ email: "humbertojrpratinha@gmail.com", senha: "418951230hj" });
         this.setEstados();
         this.setStatus();
         this.setUsuarios();
@@ -367,7 +367,7 @@ class ProdutoProvider extends Component {
 
         if (input == "rdCliente") {
             this.setState(() => {
-                return { filtroPedidosAdmin: "cliente" };
+                return { filtroPedidosAdmin: { idFiltro: "", filtro: "cliente", dataInicial: "", dataFinal: "" } };
             });
             inputStatus.checked = false;
             inputFormaPagamento.checked = false;
@@ -375,7 +375,7 @@ class ProdutoProvider extends Component {
         }
         else if (input == "rdStatus") {
             this.setState(() => {
-                return { filtroPedidosAdmin: "status" };
+                return { filtroPedidosAdmin: { idFiltro: "", filtro: "status", dataInicial: "", dataFinal: "" } };
             });
             inputCliente.checked = false;
             inputFormaPagamento.checked = false;
@@ -383,7 +383,7 @@ class ProdutoProvider extends Component {
         }
         else if (input == "rdFormaPagamento") {
             this.setState(() => {
-                return { filtroPedidosAdmin: "formaPagamento" };
+                return { filtroPedidosAdmin: { idFiltro: "", filtro: "formaPagamento", dataInicial: "", dataFinal: "" } };
             });
             inputStatus.checked = false;
             inputCliente.checked = false;
@@ -391,7 +391,7 @@ class ProdutoProvider extends Component {
         }
         else if (input == "rdPeriodo") {
             this.setState(() => {
-                return { filtroPedidosAdmin: "periodo" };
+                return { filtroPedidosAdmin: { idFiltro: "", filtro: "periodo", dataInicial: "", dataFinal: "" } };
             });
             inputStatus.checked = false;
             inputCliente.checked = false;
@@ -405,13 +405,13 @@ class ProdutoProvider extends Component {
 
         if (input == "rdUsuario") {
             this.setState(() => {
-                return { filtroFichaProducao: "usuario" };
+                return { filtroFichaProducao: { idUsuario: "", filtro: "usuario", periodoInicio: "", periodoFim: "" } };
             });
             inputPeriodo.checked = false;
         }
         else if (input == "rdPeriodo") {
             this.setState(() => {
-                return { filtroFichaProducao: "periodo" };
+                return { filtroFichaProducao: { idUsuario: "", filtro: "periodo", periodoInicio: "", periodoFim: "" } };
             });
             inputUsuario.checked = false;
         }
@@ -422,7 +422,10 @@ class ProdutoProvider extends Component {
             this.openSpinner();
             await api.get('/Produto/listar')
                 .then(res => {
-                    this.setState({ produtos: res.data });
+                    if (res.data.length > 0) {
+                        this.setState({ produtos: res.data });
+                        this.closeSpinner();
+                    }
                 })
                 .catch(err => {
                     console.log(err);
@@ -446,7 +449,7 @@ class ProdutoProvider extends Component {
     };
 
     handleDetalheFichaProducao = idFichaProducao => {
-        const fichaProducao = this.state.fichasProducaoListadosFiltro.find(item => item.idFichaProducao === idFichaProducao);
+        const fichaProducao = this.state.fichasProducaoListadosFiltro.items.find(item => item.idFichaProducao === idFichaProducao);
         this.setState(() => {
             return { detalhesFichaProducao: fichaProducao };
         });
@@ -460,14 +463,14 @@ class ProdutoProvider extends Component {
     };
 
     handleDetalhePedido = idPedido => {
-        const pedido = this.state.resultLogin.pedidos.find(item => item.idPedido === idPedido);
+        const pedido = this.state.resultLogin.pedidos.items.find(item => item.idPedido === idPedido);
         this.setState(() => {
             return { detalhesPedido: pedido };
         });
     };
 
     handleDetalhePedidoAdmin = idPedido => {
-        const pedido = this.state.pedidosListadosFiltro.find(item => item.idPedido === idPedido);
+        const pedido = this.state.pedidosListadosFiltro.items.find(item => item.idPedido === idPedido);
         this.setState(() => {
             return { detalhesPedidoAdmin: pedido };
         });
@@ -528,9 +531,8 @@ class ProdutoProvider extends Component {
         try {
             this.openSpinner();
             const endereco = this.state.resultLogin.enderecos.find(item => item.idEndereco == idEndereco);
-            const valorFrete = this.calcularFreteComParametro(endereco.cep);
             this.setState(() => {
-                return { enderecoPedidoSelecionado: endereco, resultadoConsultaCorreios: valorFrete, freteConsultado: true };
+                return { enderecoPedidoSelecionado: endereco };
             });
             this.closeSpinner();
         }
@@ -541,25 +543,48 @@ class ProdutoProvider extends Component {
 
 
 
+    listarProdutosPaginado = async (pagina) => {
+        try {
+            this.openSpinner();
+            await api.get(`/Produto/listar-paginado?pagina=${pagina}`)
+                .then(res => {
+                    var dataResult = res.data;
+                    this.setState(() => {
+                        return { produtosListadosAdmin: dataResult };
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            this.closeSpinner();
+        } catch (error) {
+            this.openModalMensagem("Erro", "/admin-pedidos");
+        }
+    };
+
     handleDeleteProdutoAdmin = async (idProduto) => {
         try {
             this.openSpinner();
 
             await api.delete(`/Produto/excluir?id=${idProduto}`)
                 .then((res) => {
-                    console.log(res);
-                    if (res.data.isValid) {
-                        let indexProdutoExcluir = this.state.produtos.map(item => { return item.idProduto }).indexOf(idProduto);
-                        let produtosAntigo = this.state.produtos;
-                        if (indexProdutoExcluir > -1)
-                            produtosAntigo.splice(indexProdutoExcluir, 1, 1);
-                        const produtosAtualizar = produtosAntigo;
-                        this.setState(() => {
-                            return { produtos: produtosAtualizar };
-                        });
-                        this.closeSpinner();
-                        this.openModalMensagem("Excluído com sucesso!", "/admin-produtos")
+                    console.log(res.data);
+                    let indexProdutoExcluir = this.state.produtos.map(item => { return item.idProduto }).indexOf(idProduto);
+                    let indexProdutoExcluir2 = this.state.produtosListadosAdmin.items.map(item => { return item.idProduto }).indexOf(idProduto);
+                    let produtosAntigo = this.state.produtos;
+                    let produtosAntigo2 = this.state.produtosListadosAdmin;
+                    if (indexProdutoExcluir > -1) {
+                        produtosAntigo.splice(indexProdutoExcluir, 1);
+                        produtosAntigo2.items.splice(indexProdutoExcluir2, 1);
+                        produtosAntigo2.totalItemCount -= 1;
                     }
+                    const produtosAtualizar = produtosAntigo;
+                    const produtosAtualizar2 = produtosAntigo2;
+                    this.setState(() => {
+                        return { produtos: produtosAtualizar, produtosListadosAdmin: produtosAtualizar2 };
+                    });
+                    this.closeSpinner();
+                    this.openModalMensagem("Excluído com sucesso!", "/admin-produtos")
                 })
                 .catch((error) => {
                     console.log(error);
@@ -576,7 +601,7 @@ class ProdutoProvider extends Component {
             let fichaProducaoListFiltroAntigo = this.state.fichasProducaoListadosFiltro;
 
             if (fichaProducaoSalvar.idFichaProducao > 0) {
-                let indexFichaProducaoAntiga = this.state.fichasProducaoListadosFiltro.map(item => { return item.idFichaProducao }).indexOf(fichaProducaoSalvar.idFichaProducao);
+                let indexFichaProducaoAntiga = this.state.fichasProducaoListadosFiltro.items.map(item => { return item.idFichaProducao }).indexOf(fichaProducaoSalvar.idFichaProducao);
                 fichaProducaoSalvar.usuario = this.state.usuariosList.find(item => item.idUsuario == fichaProducaoSalvar.usuario.idUsuario);
                 fichaProducaoSalvar.produto = this.state.produtos.find(item => item.idProduto == fichaProducaoSalvar.produto.idProduto);
 
@@ -584,7 +609,7 @@ class ProdutoProvider extends Component {
                     .then((res) => {
                         console.log(res);
                         if (res.data.hasResult) {
-                            fichaProducaoListFiltroAntigo[indexFichaProducaoAntiga] = fichaProducaoSalvar;
+                            fichaProducaoListFiltroAntigo.items[indexFichaProducaoAntiga] = fichaProducaoSalvar;
                             const fichaProducaoListAtualizar = fichaProducaoListFiltroAntigo;
                             this.setState(() => {
                                 return { fichasProducaoListadosFiltro: fichaProducaoListAtualizar, detalhesFichaProducao: fichaProducaoSalvar };
@@ -625,7 +650,6 @@ class ProdutoProvider extends Component {
             if (novoEnderecoSalvar.idEndereco > 0) {
                 await api.post("/Endereco/salvar", novoEnderecoSalvar)
                     .then((res) => {
-                        console.log(res);
                         var endereco = res.data.result;
                         result = res.data.hasResult;
                         if (result) {
@@ -648,11 +672,9 @@ class ProdutoProvider extends Component {
                 var resultLoginAtualizar = this.state.resultLogin;
                 await api.post("/Endereco/salvar", novoEnderecoSalvar)
                     .then((res) => {
-                        console.log(res);
                         novoEnderecoSalvar = res.data.result;
                         result = res.data.hasResult;
                         if (novoEnderecoSalvar.idEndereco > 0 && result) {
-                            novoEnderecoSalvar.estado = this.state.estados.find(item => item.idEstado == novoEnderecoSalvar.estado.idEstado);
                             resultLoginAtualizar.enderecos.push(novoEnderecoSalvar);
                             this.setState(() => {
                                 return { resultLogin: resultLoginAtualizar };
@@ -688,7 +710,6 @@ class ProdutoProvider extends Component {
                         this.setState(() => {
                             return { resultLogin: res.data, menuAdminShow: menuAdminShow };
                         });
-                        console.log(res);
                     }
                 })
                 .catch(err => {
@@ -703,44 +724,53 @@ class ProdutoProvider extends Component {
     listarPedidosFiltro = async (data) => {
         try {
             this.openSpinner();
-            if (this.state.filtroPedidosAdmin == "cliente") {
-                await api.get(`/Pedido/listar-por-usuario?idUsuario=${data.idFiltro}`)
+            if (this.state.filtroPedidosAdmin.filtro == "cliente") {
+                await api.get(`/Pedido/listar-por-usuario?idUsuario=${data.idFiltro}&pagina=${data.pagina}`)
                     .then(res => {
-                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
-                        console.log(res.data);
+                        var dataResult = res.data.result;
+                        this.setState({ pedidosListadosFiltro: dataResult });
+                        this.setState(() => {
+                            return { filtroPedidosAdmin: { idFiltro: data.idFiltro, filtro: "cliente", dataInicial: "", dataFinal: "", paginaAtual: data.pagina } };
+                        });
                         this.handleDataCSV();
                     })
                     .catch(err => {
                         console.log(err);
                     });
             }
-            else if (this.state.filtroPedidosAdmin == "status") {
-                await api.get(`/Pedido/listar-por-status?idStatus=${data.idFiltro}`)
-                    .then(res => {
-                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
-                        console.log(res.data);
-                        this.handleDataCSV();
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-            }
-            else if (this.state.filtroPedidosAdmin == "formaPagamento") {
-                await api.get(`/Pedido/listar-por-formapagamento?idFormaPagamento=${data.idFiltro}`)
-                    .then(res => {
-                        this.setState({ pedidosListadosFiltro: res.data.result, idFiltroAtual: data.idFiltro });
-                        console.log(res.data);
-                        this.handleDataCSV();
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-            }
-            else if (this.state.filtroPedidosAdmin == "periodo") {
-                await api.get(`/Pedido/listar-por-periodo?inicio=${data.dataInicial}&fim=${data.dataFinal}`)
+            else if (this.state.filtroPedidosAdmin.filtro == "status") {
+                await api.get(`/Pedido/listar-por-status?idStatus=${data.idFiltro}&pagina=${data.pagina}`)
                     .then(res => {
                         this.setState({ pedidosListadosFiltro: res.data.result });
-                        console.log(res.data);
+                        this.setState(() => {
+                            return { filtroPedidosAdmin: { idFiltro: data.idFiltro, filtro: "status", dataInicial: "", dataFinal: "", paginaAtual: data.pagina } };
+                        });
+                        this.handleDataCSV();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+            else if (this.state.filtroPedidosAdmin.filtro == "formaPagamento") {
+                await api.get(`/Pedido/listar-por-formapagamento?idFormaPagamento=${data.idFiltro}&pagina=${data.pagina}`)
+                    .then(res => {
+                        this.setState({ pedidosListadosFiltro: res.data.result });
+                        this.setState(() => {
+                            return { filtroPedidosAdmin: { idFiltro: data.idFiltro, filtro: "formaPagamento", dataInicial: "", dataFinal: "", paginaAtual: data.pagina } };
+                        });
+                        this.handleDataCSV();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+            else if (this.state.filtroPedidosAdmin.filtro == "periodo") {
+                await api.get(`/Pedido/listar-por-periodo?inicio=${data.dataInicial}&fim=${data.dataFinal}&pagina=${data.pagina}`)
+                    .then(res => {
+                        this.setState({ pedidosListadosFiltro: res.data.result });
+                        this.setState(() => {
+                            return { filtroPedidosAdmin: { idFiltro: data.idFiltro, filtro: "periodo", dataInicial: "", dataFinal: "", paginaAtual: data.pagina } };
+                        });
                         this.handleDataCSV();
                     })
                     .catch(err => {
@@ -754,27 +784,36 @@ class ProdutoProvider extends Component {
         }
     };
 
+    // com paginação
     listarFichasProducaoFiltro = async (data) => {
         try {
             this.openSpinner();
-            if (this.state.filtroFichaProducao == "usuario")
-                await api.get(`/FichaProducao/listar-por-usuario?idUsuario=${data.idUsuario}`)
+            if (this.state.filtroFichaProducao.filtro == "usuario") {
+                await api.get(`/FichaProducao/listar-por-usuario?idUsuario=${data.idUsuario}&pagina=${data.pagina}`)
                     .then(res => {
-                        this.setState({ fichasProducaoListadosFiltro: res.data.result });
-                        console.log(res.data);
+                        var dataResult = res.data.result;
+                        this.setState({ fichasProducaoListadosFiltro: dataResult });
+                        this.setState(() => {
+                            return { filtroFichaProducao: { idUsuario: data.idUsuario, filtro: "usuario", periodoInicio: "", periodoFim: "", paginaAtual: data.pagina } };
+                        });
                     })
                     .catch(err => {
                         console.log(err);
                     });
-            else if (this.state.filtroFichaProducao == "periodo")
-                await api.get(`/FichaProducao/listar-por-periodo?inicio=${data.periodoInicio}&fim=${data.periodoFim}`)
+            }
+            else if (this.state.filtroFichaProducao.filtro == "periodo") {
+                await api.get(`/FichaProducao/listar-por-periodo?inicio=${data.periodoInicio}&fim=${data.periodoFim}&pagina=${data.pagina}`)
                     .then(res => {
-                        this.setState({ fichasProducaoListadosFiltro: res.data.result });
-                        console.log(res.data);
+                        var dataResult = res.data.result;
+                        this.setState({ fichasProducaoListadosFiltro: dataResult });
+                        this.setState(() => {
+                            return { filtroFichaProducao: { idUsuario: "", filtro: "periodo", periodoInicio: data.periodoInicio, periodoFim: data.periodoFim, paginaAtual: data.pagina } };
+                        });
                     })
                     .catch(err => {
                         console.log(err);
                     });
+            }
             this.handleDataCSVFichaProducao();
             this.closeSpinner();
         }
@@ -793,10 +832,10 @@ class ProdutoProvider extends Component {
                     if (res.data.hasResult) {
                         const status = this.state.statusList.find(item => item.idStatus == pedidoEditar.status.idStatus);
                         pedidoEditar.status = status;
-                        let indexPedidoEditar = this.state.pedidosListadosFiltro.map(item => { return item.idPedido }).indexOf(pedidoEditar.idPedido);
+                        let indexPedidoEditar = this.state.pedidosListadosFiltro.items.map(item => { return item.idPedido }).indexOf(pedidoEditar.idPedido);
                         let pedidosListadosAntigo = this.state.pedidosListadosFiltro;
                         if (indexPedidoEditar > -1)
-                            pedidosListadosAntigo.splice(indexPedidoEditar, 1, 1);
+                            pedidosListadosAntigo.items[indexPedidoEditar] = pedidoEditar;
                         const pedidosListadosAtualizar = pedidosListadosAntigo;
                         this.setState(() => {
                             return { pedidosListadosFiltro: pedidosListadosAtualizar, detalhesPedidoAdmin: pedidoEditar };
@@ -884,7 +923,7 @@ class ProdutoProvider extends Component {
                     result = res.data.hasResult;
                     if (pedido.idPedido > 0 && result) {
                         pedido.enderecoEntrega = this.state.resultLogin.enderecos.find(x => x.idEndereco == pedido.enderecoEntrega.idEndereco);
-                        resultLoginAtualizar.pedidos.push(pedido);
+                        resultLoginAtualizar.pedidos.items.push(pedido);
                         this.closeSpinner();
                         this.openModalMensagem("Pedido realizado!", "/");
                         this.setState(() => {
@@ -925,8 +964,8 @@ class ProdutoProvider extends Component {
             let indexEnderecoExcluir = this.state.resultLogin.enderecos.map(item => { return item.idEndereco }).indexOf(idEndereco);
             let resultLoginAntigo = this.state.resultLogin;
             if (indexEnderecoExcluir > -1)
-                resultLoginAntigo.enderecos.splice(indexEnderecoExcluir, 1, 1);
-            const resultLoginAtualizar = resultLoginAntigo;
+                resultLoginAntigo.enderecos.splice(indexEnderecoExcluir, 1);
+            var resultLoginAtualizar = resultLoginAntigo;
             this.setState(() => {
                 return { resultLogin: resultLoginAtualizar };
             });
@@ -941,28 +980,20 @@ class ProdutoProvider extends Component {
     handleDeleteFichaProducao = async (idFichaProducao) => {
         try {
             this.openSpinner();
-            let indexFichaProducaoExcluir = this.state.fichasProducaoListadosFiltro.map(item => { return item.idFichaProducao }).indexOf(idFichaProducao);
+            let indexFichaProducaoExcluir = this.state.fichasProducaoListadosFiltro.items.map(item => { return item.idFichaProducao }).indexOf(idFichaProducao);
             let fichaProducaoListAntigoFiltro = this.state.fichasProducaoListadosFiltro;
-            let fichaProducaoListAntigo = this.state.fichaProducaoList;
 
 
             await api.delete(`/FichaProducao/excluir?id=${idFichaProducao}`)
                 .then((res) => {
                     console.log(res);
-
-                    if (res.data.isValid) {
-                        console.log(indexFichaProducaoExcluir);
-                        fichaProducaoListAntigoFiltro.splice(indexFichaProducaoExcluir, 1, 1);
-                        fichaProducaoListAntigo.splice(indexFichaProducaoExcluir, 1, 1);
-                        const fichaProducaoListFiltroAtualizar = fichaProducaoListAntigoFiltro;
-                        const fichaProducaoListAtualizar = fichaProducaoListAntigo;
-                        this.setState(() => {
-                            return { fichasProducaoListadosFiltro: fichaProducaoListFiltroAtualizar, fichaProducaoList: fichaProducaoListAtualizar };
-                        });
-                        this.closeSpinner();
-                        this.openModalMensagem("Excluído com sucesso!", "/admin-fichasproducao");
-                        console.log({ fichaProducaoListAntigo, fichaProducaoListAntigoFiltro });
-                    }
+                    fichaProducaoListAntigoFiltro.items.splice(indexFichaProducaoExcluir, 1);
+                    const fichaProducaoListFiltroAtualizar = fichaProducaoListAntigoFiltro;
+                    this.setState(() => {
+                        return { fichasProducaoListadosFiltro: fichaProducaoListFiltroAtualizar };
+                    });
+                    this.closeSpinner();
+                    this.openModalMensagem("Excluído com sucesso!", "/admin-fichasproducao");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -970,6 +1001,7 @@ class ProdutoProvider extends Component {
             this.closeSpinner();
         }
         catch (error) {
+            this.closeSpinner();
             console.log(error);
             this.openModalMensagem("Acho que não deu certo!", "/admin-fichasproducao");
         }
@@ -994,12 +1026,15 @@ class ProdutoProvider extends Component {
                         console.log(res);
                         var produto = res.data.result;
                         var produtosAtualizar = this.state.produtos;
+                        var produtosAtualizar2 = this.state.produtosListadosAdmin;
 
                         if (produto.idProduto > 0) {
                             produtosAtualizar.push(produto);
+                            produtosAtualizar2.items.push(produto);
                             this.setState(() => {
                                 return {
-                                    produtos: produtosAtualizar
+                                    produtos: produtosAtualizar,
+                                    produtosListadosAdmin: produtosAtualizar2
                                 };
                             });
                             this.closeSpinner();
@@ -1048,10 +1083,10 @@ class ProdutoProvider extends Component {
                 .then((res) => {
                     console.log(res);
                     if (res.data.result) {
-                        let indexPedidoExcluir = this.state.pedidosListadosFiltro.map(item => { return item.idPedido }).indexOf(idPedido);
+                        let indexPedidoExcluir = this.state.pedidosListadosFiltro.items.map(item => { return item.idPedido }).indexOf(idPedido);
                         let pedidosListadosFiltroAntigo = this.state.pedidosListadosFiltro;
                         if (indexPedidoExcluir > -1) {
-                            pedidosListadosFiltroAntigo.splice(indexPedidoExcluir, 1, 1);
+                            pedidosListadosFiltroAntigo.items.splice(indexPedidoExcluir, 1);
                             this.setState(() => {
                                 return { pedidosListadosFiltro: pedidosListadosFiltroAntigo };
                             });
@@ -1545,12 +1580,10 @@ class ProdutoProvider extends Component {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
                 }).then(res => {
-                    console.log(res);
                     const json = this.converterXMLparaJSON(res.data);
                     this.setState(() => {
                         return { resultadoConsultaCorreios: json.Servicos.cServico, freteConsultado: true };
                     });
-                    console.log(this.state.resultadoConsultaCorreios);
                     this.calculaTotal();
                 }).catch(err => { console.log(err) });
 
@@ -1845,7 +1878,8 @@ class ProdutoProvider extends Component {
                 handleSubmitCadastroProduto: this.handleSubmitCadastroProduto,
                 openModalExcluir: this.openModalExcluir,
                 closeModalExcluir: this.closeModalExcluir,
-                handleDeletePedido: this.handleDeletePedido
+                handleDeletePedido: this.handleDeletePedido,
+                listarProdutosPaginado: this.listarProdutosPaginado
             }}>
                 {this.props.children}
             </ProdutoContexto.Provider>
