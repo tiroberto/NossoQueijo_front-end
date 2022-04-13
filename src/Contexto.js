@@ -1573,7 +1573,8 @@ class ProdutoProvider extends Component {
                 nIndicaCalculo: "3"
             };
 
-            await axios.post('http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
+            const corsEverywhere = "https://cors-everywhere.herokuapp.com/";
+            await axios.post(`${corsEverywhere}http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl`,
                 queryString.stringify(content),
                 {
                     headers: {
