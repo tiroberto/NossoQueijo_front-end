@@ -19,7 +19,12 @@ export default class Pedidos extends Component {
 
                         const filtroSelecionado = () => {
                             if (filtroPedidosAdmin.filtro == "cliente") {
-                                return usuariosList.map(usuario => {
+                                var usuariosPermitidos = [];
+                                for (var i = 0; i < usuariosList.length; i++) {
+                                    if (usuariosList[i].tipoUsuario.idTipoUsuario == 2)
+                                        usuariosPermitidos.push(usuariosList[i]);
+                                }
+                                return usuariosPermitidos.map(usuario => {
                                     return <option key={usuario.idUsuario} value={usuario.idUsuario}>{usuario.nome}</option>
                                 })
                             }
