@@ -1573,7 +1573,7 @@ class ProdutoProvider extends Component {
                 nIndicaCalculo: "3"
             };
 
-            await axios.post('https://private-cors-server.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
+            await axios.post('http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?wsdl',
                 queryString.stringify(content),
                 {
                     headers: {
