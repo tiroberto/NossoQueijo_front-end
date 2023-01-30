@@ -3,9 +3,9 @@ import axios from "axios";
 const corsEverywhere = "https://cors-everywhere.herokuapp.com/";
 
 
-const azure = "https://nossoqueijowebapi20220413145454.azurewebsites.net/api"
+const azure = ""
 const localhost = "https://localhost:44338/api";
-const webAppAWS = "https://nossoqueijowebapi-dev.sa-east-1.elasticbeanstalk.com/api";
+const webAppAWS = "";
 
 const finalUrl = corsEverywhere+webAppAWS;
 
